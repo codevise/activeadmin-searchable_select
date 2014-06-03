@@ -142,4 +142,5 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin-select2!
-  bundler (~> 1.0)
+  bundler (~> 1.5)
+  rake
