@@ -6,67 +6,69 @@ Incorporate Select2 JQuery into your ActiveAdmin apps.
 
 ## Installation
 
-Add `jquery-rails` to your Gemfile:
+Add `activeadmin`, `jquery-rails` and `select2-rails` to your Gemfile:
 
 ```ruby
+   gem 'activeadmin'
    gem 'jquery-rails'
-```
-
-
-Add `select2-rails` to your Gemfile:
-
-```ruby
    gem 'select2-rails'
 ```
 
-Add `activeadmin-select2` to your Gemfile:
+And add `activeadmin-select2` to your Gemfile:
 
 ```ruby
    gem 'activeadmin-select2', github: 'mfairburn/activeadmin-select2'
 ```
 
-Replace active_admin stylesheets and javascripts with:
+Add the activeadmin-select2 calls to the active_admin stylesheets and javascripts with:
 
-```sass
-   @import "active_admin/select2/base"
+```active_admin.css.scss
+   @import "active_admin/select2/base";
 ```
 
-```coffee
+```active_admin.js.coffee
    #= require active_admin/select2
 ```
 
 
-## Custom inputs usage
+## Usage
 
-### Select2
+### Filters
 
-The infamous jquery combobox. To use add to your Gemfile:
-
-```ruby
-   gem 'chosen-rails', group: :assets
-```
-
-and then in your assets:
-
-```coffee
-   #= require chosen-jquery
-```
-
-```sass
-   @import "chosen"
-```
-
-Usage:
+Standard :select filters will automagically be converted to Select2 filters.  If you want a multi-select combo-box then use:
 
 ```ruby
-   ActiveAdmin.register Product do
+   ActiveAdmin.register Products do
+
+      filter :fruits, as: :select2_multiple, collection: [:apples, :bananas, :oranges]
+
+   end
+```
+
+### Select Lists
+
+To use a Select2 style list simply change from :select to :select2 or :select2_multiple
+
+```ruby
+   ActiveAdmin.register Products do
 
      form do |f|
-       f.input :material, as: :chosen, create_option: true
+       f.input :fruit, as: :select2
+     end
+
+     form do |f|
+       f.inputs "Product" do
+         f.has_many :fruits, allow_destroy: true, new_record: "Add Fruit" do |e|
+           e.input :fruit, as: :select2_multiple
+         end
+       end
      end
 
    end
 ```
+
+## Acknowledgements
+
 
 ## Copyright
 

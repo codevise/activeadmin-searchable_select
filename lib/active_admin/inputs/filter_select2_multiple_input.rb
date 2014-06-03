@@ -1,6 +1,6 @@
 module ActiveAdmin
   module Inputs
-    class FilterMultipleSelectInput < Formtastic::Inputs::SelectInput
+    class FilterSelect2MultipleInput < Formtastic::Inputs::SelectInput
 
      include FilterBase
 
