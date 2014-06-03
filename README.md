@@ -1,4 +1,4 @@
-# Active Admin Select2
+# ActiveAdmin Select2
 
 ## Description
 
