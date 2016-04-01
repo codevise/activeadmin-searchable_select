@@ -12,6 +12,6 @@ initSelect2 = (inputs, extra = {}) ->
 $(document).on 'has_many_add:after', '.has_many_container', (e, fieldset) ->
   initSelect2(fieldset.find('.select2-input'))
 
-$(document).ready ->
+$(document).on 'ready page:load turbolinks:load', ->
   initSelect2($(".select2-input"), placeholder: "")
   return
