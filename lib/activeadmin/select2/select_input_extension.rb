@@ -32,7 +32,13 @@ module ActiveAdmin
 
       # @api private
       def collection_from_options
-        options[:ajax] ? selected_value_collection : super
+        return super unless options[:ajax]
+
+        if Select2.inline_ajax_options
+          all_options_collection
+        else
+          selected_value_collection
+        end
       end
 
       private
@@ -44,12 +50,22 @@ module ActiveAdmin
                                   **ajax_params)
       end
 
+      def all_options_collection
+        option_collection_scope.all.map do |record|
+          option_for_record(record)
+        end
+      end
+
       def selected_value_collection
         [selected_value_option].compact
       end
 
       def selected_value_option
-        [option_collection.text(selected_record), selected_record.id] if selected_record
+        option_for_record(selected_record) if selected_record
+      end
+
+      def option_for_record(record)
+        [option_collection.text(record), record.id]
       end
 
       def selected_record
