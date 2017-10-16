@@ -1,4 +1,9 @@
-Copyright (c) 2014 Mark Fariburn, Praxitar Ltd
+
+Copyright for portions of `codevise/activeadmin-searchable_select`
+held by Mark Fariburn, Praxitar Ltd, 2014 as part of
+`mfairburn/activeadmin-select2` which this project is based on. All
+other copyright for `codevise/activeadmin-searchable_select` held by
+Codevise Solutions Ltd, 2017.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
