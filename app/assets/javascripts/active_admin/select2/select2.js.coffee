@@ -5,6 +5,17 @@ initSelect2 = (inputs, extra = {}) ->
     item = $(this)
     # reading from data allows <input data-select2='{"tags": ['some']}'> to be passed to select2
     options = $.extend(allowClear: true, extra, item.data('select2'))
+    url = item.data('ajaxUrl');
+
+    if url
+      $.extend(
+        options,
+        ajax: {
+          url: url,
+          dataType: 'json'
+        }
+      )
+
     # because select2 reads from input.data to check if it is select2 already
     item.data('select2', null)
     item.select2(options)
