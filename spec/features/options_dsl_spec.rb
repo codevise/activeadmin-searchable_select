@@ -14,7 +14,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
       end
     end
 
-    it 'returns options for select2' do
+    it 'returns options for searchable select' do
       Post.create!(title: 'A post')
 
       get '/admin/posts/all_options'

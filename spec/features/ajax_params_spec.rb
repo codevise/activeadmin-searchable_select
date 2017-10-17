@@ -36,7 +36,7 @@ RSpec.describe 'ajax params', type: :request do
     ApplicationController.current_user = user
     get "/admin/posts/#{post.id}/edit"
 
-    expect(response.body).to have_selector('.select2-input option[selected]',
+    expect(response.body).to have_selector('.searchable-select-input option[selected]',
                                            text: 'Travel')
   end
 
@@ -47,6 +47,7 @@ RSpec.describe 'ajax params', type: :request do
     get '/admin/posts/new'
 
     url_matcher = "?created_by=#{user.id}"
-    expect(response.body).to have_selector(".select2-input[data-ajax-url*='#{url_matcher}']")
+    expect(response.body).to have_selector('.searchable-select-input' \
+                                           "[data-ajax-url*='#{url_matcher}']")
   end
 end

@@ -16,10 +16,10 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    it 'renders select input with select2-input css class' do
+    it 'renders select input with searchable-select-input css class' do
       get '/admin/posts/new'
 
-      expect(response.body).to have_selector('select.select2-input')
+      expect(response.body).to have_selector('select.searchable-select-input')
     end
 
     it 'renders options statically' do
@@ -28,22 +28,22 @@ RSpec.describe 'form input', type: :request do
 
       get '/admin/posts/new'
 
-      expect(response.body).to have_selector('.select2-input option', text: 'Travel')
-      expect(response.body).to have_selector('.select2-input option', text: 'Music')
+      expect(response.body).to have_selector('.searchable-select-input option', text: 'Travel')
+      expect(response.body).to have_selector('.searchable-select-input option', text: 'Music')
     end
 
     it 'does not set data-ajax-url attribute' do
       get '/admin/posts/new'
 
-      expect(response.body).not_to have_selector('.select2-input[data-ajax-url]')
+      expect(response.body).not_to have_selector('.searchable-select-input[data-ajax-url]')
     end
   end
 
-  shared_examples 'renders ajax based select2 input' do
-    it 'renders select input with select2-input css class' do
+  shared_examples 'renders ajax based searchable select input' do
+    it 'renders select input with searchable-select-input css class' do
       get '/admin/posts/new'
 
-      expect(response.body).to have_selector('select.select2-input')
+      expect(response.body).to have_selector('select.searchable-select-input')
     end
 
     it 'does not render options statically' do
@@ -51,13 +51,13 @@ RSpec.describe 'form input', type: :request do
 
       get '/admin/posts/new'
 
-      expect(response.body).not_to have_selector('.select2-input option', text: 'Travel')
+      expect(response.body).not_to have_selector('.searchable-select-input option', text: 'Travel')
     end
 
     it 'sets data-ajax-url attribute' do
       get '/admin/posts/new'
 
-      expect(response.body).to have_selector('.select2-input[data-ajax-url]')
+      expect(response.body).to have_selector('.searchable-select-input[data-ajax-url]')
     end
 
     it 'renders selected option for current value' do
@@ -66,7 +66,7 @@ RSpec.describe 'form input', type: :request do
 
       get "/admin/posts/#{post.id}/edit"
 
-      expect(response.body).to have_selector('.select2-input option[selected]',
+      expect(response.body).to have_selector('.searchable-select-input option[selected]',
                                              text: 'Travel')
     end
   end
@@ -88,7 +88,7 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    include_examples 'renders ajax based select2 input'
+    include_examples 'renders ajax based searchable select input'
   end
 
   describe 'with options collection name passed in ajax option' do
@@ -110,7 +110,7 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    include_examples 'renders ajax based select2 input'
+    include_examples 'renders ajax based searchable select input'
   end
 
   describe 'with options resource passed in ajax option' do
@@ -132,7 +132,7 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    include_examples 'renders ajax based select2 input'
+    include_examples 'renders ajax based searchable select input'
   end
 
   describe 'with options resource and collection name passed in ajax option' do
@@ -155,7 +155,7 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    include_examples 'renders ajax based select2 input'
+    include_examples 'renders ajax based searchable select input'
   end
 
   describe 'with custom class attribute' do
@@ -169,10 +169,10 @@ RSpec.describe 'form input', type: :request do
       end
     end
 
-    it 'adds select2-input css class' do
+    it 'adds searchable-select-input css class' do
       get '/admin/posts/new'
 
-      expect(response.body).to have_selector('select.custom.select2-input')
+      expect(response.body).to have_selector('select.custom.searchable-select-input')
     end
   end
 end

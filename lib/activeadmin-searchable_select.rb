@@ -1,6 +1,6 @@
 # rubocop:disable Style/FileName
 
-require 'activeadmin/select2'
+require 'activeadmin/searchable_select'
 
 require 'activeadmin/inputs/filters/searchable_select_input'
 require 'activeadmin/inputs/searchable_select_input'

@@ -1,5 +1,5 @@
 module ActiveAdmin
-  module Select2
+  module SearchableSelect
     # Mixin for searchable select inputs.
     #
     # Supports the same options as inputs of type `:select`.
@@ -26,7 +26,7 @@ module ActiveAdmin
       # @api private
       def input_html_options
         options = super
-        options[:class] = [options[:class], 'select2-input'].compact.join(' ')
+        options[:class] = [options[:class], 'searchable-select-input'].compact.join(' ')
         options.merge('data-ajax-url' => ajax_url)
       end
 
@@ -34,7 +34,7 @@ module ActiveAdmin
       def collection_from_options
         return super unless options[:ajax]
 
-        if Select2.inline_ajax_options
+        if SearchableSelect.inline_ajax_options
           all_options_collection
         else
           selected_value_collection
@@ -108,7 +108,7 @@ module ActiveAdmin
         raise('Cannot auto detect resource to fetch options for searchable select input from. ' \
               "Explicitly pass class of an ActiveAdmin resource:\n\n" \
               "  f.input(:custom_category,\n" \
-              "          type: :select2,\n" \
+              "          type: :searchable_select,\n" \
               "          ajax: {\n" \
               "            resource: Category\n" \
               "          })\n")

@@ -6,7 +6,7 @@ module ActiveAdmin
       # @see ActiveAdmin::Select2::SelectInputExtension for list of
       # available options.
       class SearchableSelectInput < SelectInput
-        include Select2::SelectInputExtension
+        include SearchableSelect::SelectInputExtension
       end
     end
   end

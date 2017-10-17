@@ -2,18 +2,16 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'activeadmin/select2/version'
+require 'activeadmin/searchable_select/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'activeadmin-select2'
-  spec.version       = ActiveAdmin::Select2::VERSION
-  spec.summary       = 'Incorporate Select2 jquery into ActiveAdmin'
-  spec.description   = 'With ActiveAdmin-Select2 you are able to choose Select2 ' \
-                       'as a drop-down entry option in Forms and Filters'
+  spec.name          = 'activeadmin-searchable_select'
+  spec.version       = ActiveAdmin::SearchableSelect::VERSION
+  spec.summary       = 'Use searchable selects based on Select2 in Active Admin forms and filters.'
   spec.license       = 'MIT'
-  spec.authors       = ['Mark Fairburn']
-  spec.email         = 'mark@praxitar,com'
-  spec.homepage      = 'https://github.com/mfairburn/activeadmin-select2#readme'
+  spec.authors       = ['Codevise Solutions Ltd']
+  spec.email         = 'info@codevise.de'
+  spec.homepage      = 'https://github.com/codevise/activeadmin-searchable_select'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.require_paths = ['lib']

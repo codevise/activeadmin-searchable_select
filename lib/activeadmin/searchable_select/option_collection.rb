@@ -1,5 +1,5 @@
 module ActiveAdmin
-  module Select2
+  module SearchableSelect
     # @api private
     class OptionCollection
       def initialize(name, options)

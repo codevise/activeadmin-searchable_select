@@ -15,7 +15,7 @@ RSpec.describe 'end to end', type: :feature, js: true do
         filter(:category, as: :searchable_select, ajax: true)
 
         form do |f|
-          f.input(:category, as: select2, ajax: true)
+          f.input(:category, as: :searchable_select, ajax: true)
         end
       end
 
@@ -23,7 +23,7 @@ RSpec.describe 'end to end', type: :feature, js: true do
     end
   end
 
-  describe 'index page with select2 filter' do
+  describe 'index page with searchable select filter' do
     before(:each) do
       music_category = Category.create(name: 'Music')
       travel_category = Category.create(name: 'Travel')
