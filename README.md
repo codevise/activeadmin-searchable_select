@@ -1,6 +1,6 @@
 # ActiveAdmin Searchable Select
 
-Searchable select boxes (via [Select2](https://select2.org/) for
+Searchable select boxes (via [Select2](https://select2.org/)) for
 ActiveAdmin forms and filters. Extends the ActiveAdmin resource DSL to
 allow defining JSON endpoints to fetch options from asynchronoulsy.
 
@@ -23,15 +23,13 @@ Add `activeadmin-searchable_select` to your Gemfile:
 
 Import stylesheets and require javascripts:
 
-```
+```scss
 // active_admin.css.scss
-
 @import "active_admin/searchable_select";
 ```
 
-```
+```coffee
 # active_admin.js.coffee
-
 #= require active_admin/searchable_select
 ```
 
