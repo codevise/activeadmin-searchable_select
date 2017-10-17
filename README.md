@@ -204,6 +204,29 @@ for feature specs:
 
 ```
 
+## Development
+
+To run the tests install bundled gems and invoke RSpec:
+
+```
+$ bundle
+$ bundle exec rspec
+```
+
+The test suite can be run against different versions of Rails and
+Active Admin (see `Appraisals` file):
+
+```
+$ appraisal install
+$ appraisal rspec
+```
+
+Please make sure changes conform with the styleguide:
+
+```
+$ bundle exec rubocop
+```
+
 ## Acknowledgements
 
 Based on
