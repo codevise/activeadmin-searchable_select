@@ -5,7 +5,7 @@
 
 Searchable select boxes (via [Select2](https://select2.org/)) for
 ActiveAdmin forms and filters. Extends the ActiveAdmin resource DSL to
-allow defining JSON endpoints to fetch options from asynchronoulsy.
+allow defining JSON endpoints to fetch options from asynchronously.
 
 ## Installation
 
