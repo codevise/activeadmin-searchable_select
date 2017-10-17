@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'capybara', '~> 2.15'
   spec.add_development_dependency 'poltergeist', '~> 1.15'
   spec.add_development_dependency 'rubocop', '~> 0.42.0'
+  spec.add_development_dependency 'semmy', '~> 1.0'
   spec.add_development_dependency 'rails'
 
   spec.add_runtime_dependency 'activeadmin'
