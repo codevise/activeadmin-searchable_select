@@ -1,5 +1,8 @@
 # ActiveAdmin Searchable Select
 
+[![Gem Version](https://badge.fury.io/rb/activeadmin-searchable_select.svg)](http://badge.fury.io/rb/activeadmin-searchable_select)
+[![Build Status](https://travis-ci.org/codevise/activeadmin-searchable_select.svg?branch=master)](https://travis-ci.org/codevise/activeadmin-searchable_select)
+
 Searchable select boxes (via [Select2](https://select2.org/)) for
 ActiveAdmin forms and filters. Extends the ActiveAdmin resource DSL to
 allow defining JSON endpoints to fetch options from asynchronoulsy.

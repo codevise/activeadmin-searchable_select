@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - 2.3.4
+
+# Use container based travis infrastructure which allows caching
+# features for open source projects.
+sudo: false
+cache:
+  bundler: true
+
+gemfile:
+  - gemfiles/rails_4.2_active_admin_1.0.0.pre4.gemfile
+  - gemfiles/rails_5.1_active_admin_1.0.gemfile
+
+script: bundle exec rspec
