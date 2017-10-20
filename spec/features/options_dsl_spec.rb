@@ -5,7 +5,7 @@ require 'support/pluck_polyfill'
 require 'support/active_admin_helpers'
 
 RSpec.describe 'searchable_select_options dsl', type: :request do
-  describe 'creates JSON endpoint that' do
+  describe 'with text_attribute option' do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Post) do
@@ -14,34 +14,122 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
       end
     end
 
-    it 'returns options for searchable select' do
-      Post.create!(title: 'A post')
+    describe 'creates JSON endpoint that' do
+      it 'returns options for searchable select' do
+        Post.create!(title: 'A post')
 
-      get '/admin/posts/all_options'
+        get '/admin/posts/all_options'
 
-      expect(json_response).to match(results: [a_hash_including(text: 'A post',
-                                                                id: kind_of(Numeric))])
+        expect(json_response).to match(results: [a_hash_including(text: 'A post',
+                                                                  id: kind_of(Numeric))])
+      end
+
+      it 'supports filtering via term parameter' do
+        Post.create!(title: 'A post')
+        Post.create!(title: 'Other post')
+        Post.create!(title: 'Not matched')
+
+        get '/admin/posts/all_options?term=post'
+        titles = json_response[:results].pluck(:text)
+
+        expect(titles).to eq(['A post', 'Other post'])
+      end
+
+      it 'supports limiting number of results' do
+        Post.create!(title: 'A post')
+        Post.create!(title: 'Other post')
+        Post.create!(title: 'Yet another post')
+
+        get '/admin/posts/all_options?limit=2'
+
+        expect(json_response[:results].size).to eq(2)
+      end
+    end
+  end
+
+  describe 'with separate filter option' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Post) do
+          searchable_select_options(scope: Post,
+                                    filter: ->(term, scope) { scope.where(title: term) },
+                                    text_attribute: :title)
+        end
+      end
     end
 
-    it 'supports filtering via term parameter' do
-      Post.create!(title: 'A post')
-      Post.create!(title: 'Other post')
-      Post.create!(title: 'Not matched')
+    describe 'creates JSON endpoint that' do
+      it 'returns options for searchable select' do
+        Post.create!(title: 'A post')
 
-      get '/admin/posts/all_options?term=post'
-      titles = json_response[:results].pluck(:text)
+        get '/admin/posts/all_options'
 
-      expect(titles).to eq(['A post', 'Other post'])
+        expect(json_response).to match(results: [a_hash_including(text: 'A post',
+                                                                  id: kind_of(Numeric))])
+      end
+
+      it 'supports filtering via term parameter' do
+        Post.create!(title: 'Post')
+        Post.create!(title: 'Not matched')
+
+        get '/admin/posts/all_options?term=Post'
+        titles = json_response[:results].pluck(:text)
+
+        expect(titles).to eq(['Post'])
+      end
+
+      it 'supports limiting number of results' do
+        Post.create!(title: 'A post')
+        Post.create!(title: 'Other post')
+        Post.create!(title: 'Yet another post')
+
+        get '/admin/posts/all_options?limit=2'
+
+        expect(json_response[:results].size).to eq(2)
+      end
+    end
+  end
+
+  describe 'with separate display_text option' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Post) do
+          searchable_select_options(scope: Post,
+                                    display_text: ->(record) { record.title.upcase },
+                                    text_attribute: :title)
+        end
+      end
     end
 
-    it 'supports limiting number of results' do
-      Post.create!(title: 'A post')
-      Post.create!(title: 'Other post')
-      Post.create!(title: 'Yet another post')
+    describe 'creates JSON endpoint that' do
+      it 'returns options for searchable select' do
+        Post.create!(title: 'A post')
 
-      get '/admin/posts/all_options?limit=2'
+        get '/admin/posts/all_options'
 
-      expect(json_response[:results].size).to eq(2)
+        expect(json_response).to match(results: [a_hash_including(text: 'A POST',
+                                                                  id: kind_of(Numeric))])
+      end
+
+      it 'supports filtering via term parameter' do
+        Post.create!(title: 'A post')
+        Post.create!(title: 'Not matched')
+
+        get '/admin/posts/all_options?term=post'
+        titles = json_response[:results].pluck(:text)
+
+        expect(titles).to eq(['A POST'])
+      end
+
+      it 'supports limiting number of results' do
+        Post.create!(title: 'A post')
+        Post.create!(title: 'Other post')
+        Post.create!(title: 'Yet another post')
+
+        get '/admin/posts/all_options?limit=2'
+
+        expect(json_response[:results].size).to eq(2)
+      end
     end
   end
 
@@ -125,14 +213,26 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     end.to raise_error(/Missing option: scope/)
   end
 
-  it 'fails with helpful message if text_attribute option is missing' do
+  it 'fails with helpful message if display_text are missing' do
     expect do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Post) do
-          searchable_select_options(scope: Post)
+          searchable_select_options(scope: Post,
+                                    filter: ->(_term, scope) { scope })
         end
       end
-    end.to raise_error(/Missing option: text_attribute/)
+    end.to raise_error(/Missing option: display_text/)
+  end
+
+  it 'fails with helpful message if filter option is missing' do
+    expect do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Post) do
+          searchable_select_options(scope: Post,
+                                    display_text: ->(_term, scope) { scope })
+        end
+      end
+    end.to raise_error(/Missing option: filter/)
   end
 
   def json_response

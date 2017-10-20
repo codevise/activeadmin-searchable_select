@@ -11,10 +11,18 @@ module ActiveAdmin
       #   context of the collection action defined by this
       #   method. Procs can optionally take a single `params` argument
       #   containing data defined under the `params` key of the
-      #   input's `ajax` option.
+      #   input's `ajax` option. Required.
       #
-      # @param text_attribute [Symbol] Name of method to call on record
-      #   to get display name.
+      # @param text_attribute [Symbol] Name of attribute to use as
+      #   display name and to filter by search term.
+      #
+      # @param display_text [Proc] Takes the record as
+      #   parameter. Required if `text_attribute` is not present.
+      #
+      # @param filter [Proc] Takes the search term and an Active
+      #   Record scope as parameters and needs to return a scope of
+      #   filtered records. Required if `text_attribute` is not
+      #   present.
       #
       # @param name [Symbol] Optional collection name if helper is
       #   used multiple times within one resource.

@@ -86,12 +86,35 @@ collection action:
    end
 ```
 
-The `scope` and `text_attribute` options are required. `scope` needs to
-be a Ransack enabled ActiveRecord collection proxy determining which
-options are available. The method given by `text_attribute` will be
-called for each record to get the display name for the
-option. Filtering by search term and limiting result set size is
-handled automatically.
+By default, `scope` needs to be a Ransack enabled ActiveRecord
+collection proxy determining which options are available. The
+attribute given by `text_attribute` will be used to get a display name
+for each record. Via Ransack, it is also used to filter by search
+term. Limiting result set size is handled automatically.
+
+You can customize the display text:
+
+```ruby
+   ActiveAdmin.register Category do
+     searchable_select_options(scope: Category.all,
+                               text_attribute: :name,
+                               display_text: ->(record) { "Category: #{record.name}" } )
+   end
+```
+
+Note that `text_attribute` is still required to perform filtering via
+Ransack. You can pass the `filter` option, to specify your own
+filtering strategy:
+
+```ruby
+   ActiveAdmin.register Category do
+     searchable_select_options(scope: Category.all,
+                               text_attribute: :name,
+                               filter: lambda |term, scope|
+                                 scope.ransack(name_cont_all: term.split(' ')).result
+                               end)
+   end
+```
 
 `scope` can also be a lambda which is evaluated in the context of the
 collection action defined by the helper:

@@ -4,16 +4,9 @@ module ActiveAdmin
     class OptionCollection
       def initialize(name, options)
         @name = name
-
-        @scope = options.fetch(:scope) do
-          raise('Missing option: scope. ' \
-                'Pass the collection of items to render options for.')
-        end
-
-        @text_attribute = options.fetch(:text_attribute) do
-          raise('Missing option: text_attribute. ' \
-                'Pass the name of a method which returns a display name.')
-        end
+        @scope = extract_scope_option(options)
+        @display_text = extract_display_text_option(options)
+        @filter = extract_filter_option(options)
       end
 
       def scope(template, params)
@@ -29,8 +22,8 @@ module ActiveAdmin
         end
       end
 
-      def text(record)
-        record.send(@text_attribute)
+      def display_text(record)
+        @display_text.call(record)
       end
 
       def collection_action_name
@@ -41,7 +34,7 @@ module ActiveAdmin
         results = records(template, params).map do |record|
           {
             id: record.id,
-            text: text(record)
+            text: display_text(record)
           }
         end
 
@@ -55,11 +48,42 @@ module ActiveAdmin
       end
 
       def filter(scope, term)
-        term ? scope.ransack("#{@text_attribute}_cont" => term).result : scope
+        term ? @filter.call(term, scope) : scope
       end
 
       def limit(scope, count)
         scope.limit(count || 10)
+      end
+
+      def extract_scope_option(options)
+        options.fetch(:scope) do
+          raise('Missing option: scope. ' \
+                'Pass the collection of items to render options for.')
+        end
+      end
+
+      def extract_display_text_option(options)
+        options.fetch(:display_text) do
+          text_attribute = options.fetch(:text_attribute) do
+            raise('Missing option: display_text or text_attribute. ' \
+                  'Either pass a proc to determine the display text for a record ' \
+                  'or set the text_attribute option.')
+          end
+
+          ->(record) { record.send(text_attribute) }
+        end
+      end
+
+      def extract_filter_option(options)
+        options.fetch(:filter) do
+          text_attribute = options.fetch(:text_attribute) do
+            raise('Missing option: filter or text_attribute. ' \
+                  'Either pass a proc which filters the scope according to a given ' \
+                  'or set the text_attribute option to apply a default Ransack filter.')
+          end
+
+          ->(term, scope) { scope.ransack("#{text_attribute}_cont" => term).result }
+        end
       end
     end
   end
