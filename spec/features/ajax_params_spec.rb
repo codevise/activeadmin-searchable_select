@@ -11,7 +11,7 @@ RSpec.describe 'ajax params', type: :request do
         searchable_select_options(scope: lambda do |params|
                                            Category.where(created_by_id: params[:created_by])
                                          end,
-                                  text_method: :name)
+                                  text_attribute: :name)
       end
 
       ActiveAdmin.register(Post) do

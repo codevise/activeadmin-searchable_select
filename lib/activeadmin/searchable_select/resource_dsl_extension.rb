@@ -13,7 +13,7 @@ module ActiveAdmin
       #   containing data defined under the `params` key of the
       #   input's `ajax` option.
       #
-      # @param text_method [Symbol] Name of method to call on record
+      # @param text_attribute [Symbol] Name of method to call on record
       #   to get display name.
       #
       # @param name [Symbol] Optional collection name if helper is

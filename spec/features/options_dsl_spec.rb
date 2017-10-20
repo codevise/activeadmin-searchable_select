@@ -9,7 +9,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Post) do
-          searchable_select_options(scope: Post, text_method: :title)
+          searchable_select_options(scope: Post, text_attribute: :title)
         end
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     ActiveAdminHelpers.setup do
       ActiveAdmin.register(Post) do
         searchable_select_options(scope: -> { Post.published },
-                                  text_method: :title)
+                                  text_attribute: :title)
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     ActiveAdminHelpers.setup do
       ActiveAdmin.register(Post) do
         searchable_select_options(scope: -> { Post.where(user: current_user) },
-                                  text_method: :title)
+                                  text_attribute: :title)
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     ActiveAdminHelpers.setup do
       ActiveAdmin.register(Post) do
         searchable_select_options(scope: ->(params) { Post.where(user_id: params[:user]) },
-                                  text_method: :title)
+                                  text_attribute: :title)
       end
     end
 
@@ -104,7 +104,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
       ActiveAdmin.register(Post) do
         searchable_select_options(name: :some,
                                   scope: Post,
-                                  text_method: :title)
+                                  text_attribute: :title)
       end
     end
 
@@ -119,20 +119,20 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     expect do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Post) do
-          searchable_select_options(text_method: :title)
+          searchable_select_options(text_attribute: :title)
         end
       end
     end.to raise_error(/Missing option: scope/)
   end
 
-  it 'fails with helpful message if text_method option is missing' do
+  it 'fails with helpful message if text_attribute option is missing' do
     expect do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Post) do
           searchable_select_options(scope: Post)
         end
       end
-    end.to raise_error(/Missing option: text_method/)
+    end.to raise_error(/Missing option: text_attribute/)
   end
 
   def json_response

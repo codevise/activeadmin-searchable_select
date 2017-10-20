@@ -72,7 +72,7 @@ RSpec.describe 'filter input', type: :request do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(scope: Category, text_method: :name)
+          searchable_select_options(scope: Category, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do
@@ -90,7 +90,7 @@ RSpec.describe 'filter input', type: :request do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(name: 'custom', scope: Category, text_method: :name)
+          searchable_select_options(name: 'custom', scope: Category, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do
@@ -110,7 +110,7 @@ RSpec.describe 'filter input', type: :request do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(scope: Category, text_method: :name)
+          searchable_select_options(scope: Category, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do
@@ -130,7 +130,7 @@ RSpec.describe 'filter input', type: :request do
     before(:each) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(name: 'custom', scope: Category, text_method: :name)
+          searchable_select_options(name: 'custom', scope: Category, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do
@@ -151,7 +151,7 @@ RSpec.describe 'filter input', type: :request do
     it 'applies scope when looking up record' do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(scope: Category.none, text_method: :name)
+          searchable_select_options(scope: Category.none, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do
@@ -170,7 +170,7 @@ RSpec.describe 'filter input', type: :request do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
           searchable_select_options(scope: -> { Category.where(created_by: current_user) },
-                                    text_method: :name)
+                                    text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do

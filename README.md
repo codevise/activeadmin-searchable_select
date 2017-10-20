@@ -82,13 +82,13 @@ collection action:
 ```ruby
    ActiveAdmin.register Category do
      searchable_select_options(scope: Category.all,
-                               text_method: :name)
+                               text_attribute: :name)
    end
 ```
 
-The `scope` and `text_method` options are required. `scope` needs to
+The `scope` and `text_attribute` options are required. `scope` needs to
 be a Ransack enabled ActiveRecord collection proxy determining which
-options are available. The method given by `text_method` will be
+options are available. The method given by `text_attribute` will be
 called for each record to get the display name for the
 option. Filtering by search term and limiting result set size is
 handled automatically.
@@ -99,7 +99,7 @@ collection action defined by the helper:
 ```ruby
    ActiveAdmin.register Category do
      searchable_select_options(scope: -> { Category.allowed_for(current_user) },
-                               text_method: :name)
+                               text_attribute: :name)
    end
 ```
 
@@ -132,11 +132,11 @@ A single ActiveAdmin resource can define multiple options endpoints:
    ActiveAdmin.register Category do
      searchable_select_options(name: :favorites,
                                scope: Category.favorites,
-                               text_method: :name)
+                               text_attribute: :name)
 
      searchable_select_options(name: :recent,
                                scope: Category.recent,
-                               text_method: :name)
+                               text_attribute: :name)
    end
 ```
 
@@ -179,7 +179,7 @@ argument:
      searchable_select_options(scope: lambda do |params|
                                  Category.find_all_by_some(params[:some])
                                end,
-                               text_method: :name)
+                               text_attribute: :name)
    end
 ```
 
@@ -190,7 +190,7 @@ asynchronous loading of select options can increase test
 complexity. `activeadmin-searchable_select` provides an option to
 render all available options just like a normal select input while
 still exercsing the same code paths including `scope` and
-`text_method` handling.
+`text_attribute` handling.
 
 For example with RSpec/Capybara, simply set `inline_ajax_options` true
 for feature specs:

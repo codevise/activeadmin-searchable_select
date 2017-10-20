@@ -23,7 +23,7 @@ RSpec.describe 'searchable select', type: :request do
     expect do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(Category) do
-          searchable_select_options(scope: Category, text_method: :name)
+          searchable_select_options(scope: Category, text_attribute: :name)
         end
 
         ActiveAdmin.register(Post) do

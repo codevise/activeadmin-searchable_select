@@ -10,8 +10,8 @@ module ActiveAdmin
                 'Pass the collection of items to render options for.')
         end
 
-        @text_method = options.fetch(:text_method) do
-          raise('Missing option: text_method. ' \
+        @text_attribute = options.fetch(:text_attribute) do
+          raise('Missing option: text_attribute. ' \
                 'Pass the name of a method which returns a display name.')
         end
       end
@@ -30,7 +30,7 @@ module ActiveAdmin
       end
 
       def text(record)
-        record.send(@text_method)
+        record.send(@text_attribute)
       end
 
       def collection_action_name
@@ -55,7 +55,7 @@ module ActiveAdmin
       end
 
       def filter(scope, term)
-        term ? scope.ransack("#{@text_method}_cont" => term).result : scope
+        term ? scope.ransack("#{@text_attribute}_cont" => term).result : scope
       end
 
       def limit(scope, count)
