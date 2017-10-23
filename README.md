@@ -9,15 +9,6 @@ allow defining JSON endpoints to fetch options from asynchronously.
 
 ## Installation
 
-Ensure `activeadmin`, `jquery-rails` and `select2-rails` are part of
-your Gemfile:
-
-```ruby
-   gem 'activeadmin'
-   gem 'jquery-rails'
-   gem 'select2-rails'
-```
-
 Add `activeadmin-searchable_select` to your Gemfile:
 
 ```ruby
