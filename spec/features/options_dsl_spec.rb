@@ -21,7 +21,8 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
         get '/admin/posts/all_options'
 
         expect(json_response).to match(results: [a_hash_including(text: 'A post',
-                                                                  id: kind_of(Numeric))])
+                                                                  id: kind_of(Numeric))],
+                                       pagination: { more: false })
       end
 
       it 'supports filtering via term parameter' do
@@ -33,16 +34,6 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
         titles = json_response[:results].pluck(:text)
 
         expect(titles).to eq(['A post', 'Other post'])
-      end
-
-      it 'supports limiting number of results' do
-        Post.create!(title: 'A post')
-        Post.create!(title: 'Other post')
-        Post.create!(title: 'Yet another post')
-
-        get '/admin/posts/all_options?limit=2'
-
-        expect(json_response[:results].size).to eq(2)
       end
     end
   end
@@ -65,7 +56,8 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
         get '/admin/posts/all_options'
 
         expect(json_response).to match(results: [a_hash_including(text: 'A post',
-                                                                  id: kind_of(Numeric))])
+                                                                  id: kind_of(Numeric))],
+                                       pagination: { more: false })
       end
 
       it 'supports filtering via term parameter' do
@@ -76,16 +68,6 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
         titles = json_response[:results].pluck(:text)
 
         expect(titles).to eq(['Post'])
-      end
-
-      it 'supports limiting number of results' do
-        Post.create!(title: 'A post')
-        Post.create!(title: 'Other post')
-        Post.create!(title: 'Yet another post')
-
-        get '/admin/posts/all_options?limit=2'
-
-        expect(json_response[:results].size).to eq(2)
       end
     end
   end
@@ -108,7 +90,8 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
         get '/admin/posts/all_options'
 
         expect(json_response).to match(results: [a_hash_including(text: 'A POST',
-                                                                  id: kind_of(Numeric))])
+                                                                  id: kind_of(Numeric))],
+                                       pagination: { more: false })
       end
 
       it 'supports filtering via term parameter' do
@@ -120,16 +103,40 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
 
         expect(titles).to eq(['A POST'])
       end
+    end
+  end
 
-      it 'supports limiting number of results' do
-        Post.create!(title: 'A post')
-        Post.create!(title: 'Other post')
-        Post.create!(title: 'Yet another post')
-
-        get '/admin/posts/all_options?limit=2'
-
-        expect(json_response[:results].size).to eq(2)
+  describe 'pagination' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Post) do
+          searchable_select_options(scope: Post,
+                                    text_attribute: :title,
+                                    per_page: 2)
+        end
       end
+    end
+
+    it 'limits results and indicates that more results are available' do
+      Post.create!(title: 'A post')
+      Post.create!(title: 'Other post')
+      Post.create!(title: 'Yet another post')
+
+      get '/admin/posts/all_options'
+
+      expect(json_response[:results].size).to eq(2)
+      expect(json_response[:pagination][:more]).to eq(true)
+    end
+
+    it 'allows passing page param' do
+      Post.create!(title: 'A post')
+      Post.create!(title: 'Other post')
+      Post.create!(title: 'Yet another post')
+
+      get '/admin/posts/all_options?page=1'
+
+      expect(json_response[:results].size).to eq(1)
+      expect(json_response[:pagination][:more]).to eq(false)
     end
   end
 
@@ -200,7 +207,7 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
 
     get '/admin/posts/some_options'
 
-    expect(json_response).to match(results: array_including(a_hash_including(text: 'A post')))
+    expect(json_response).to include(results: array_including(a_hash_including(text: 'A post')))
   end
 
   it 'fails with helpful message if scope option is missing' do

@@ -7,6 +7,7 @@ module ActiveAdmin
         @scope = extract_scope_option(options)
         @display_text = extract_display_text_option(options)
         @filter = extract_filter_option(options)
+        @per_page = options.fetch(:per_page, 10)
       end
 
       def scope(template, params)
@@ -31,28 +32,40 @@ module ActiveAdmin
       end
 
       def as_json(template, params)
-        results = records(template, params).map do |record|
+        records, more = fetch_records(template, params)
+
+        results = records.map do |record|
           {
             id: record.id,
             text: display_text(record)
           }
         end
 
-        { results: results }
+        { results: results, pagination: { more: more } }
       end
 
       private
 
-      def records(template, params)
-        limit(filter(scope(template, params), params[:term]), params[:limit])
+      attr_reader :per_page
+
+      def fetch_records(template, params)
+        paginate(filter(scope(template, params), params[:term]),
+                 params[:page])
       end
 
       def filter(scope, term)
         term ? @filter.call(term, scope) : scope
       end
 
-      def limit(scope, count)
-        scope.limit(count || 10)
+      def paginate(scope, page_index)
+        page_index = page_index.to_i
+
+        records = scope.limit(per_page + 1).offset(page_index * per_page).to_a
+
+        [
+          records.slice(0, per_page),
+          records.size > per_page
+        ]
       end
 
       def extract_scope_option(options)
