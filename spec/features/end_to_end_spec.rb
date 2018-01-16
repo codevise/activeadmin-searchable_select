@@ -24,34 +24,41 @@ RSpec.describe 'end to end', type: :feature, js: true do
   end
 
   describe 'index page with searchable select filter' do
-    before(:each) do
-      music_category = Category.create(name: 'Music')
-      travel_category = Category.create(name: 'Travel')
-
-      Post.create(title: 'Best songs',
-                  category: music_category)
-      Post.create(title: 'Best places',
-                  category: travel_category)
-    end
-
     it 'loads filter input options' do
+      Category.create(name: 'Music')
+      Category.create(name: 'Travel')
+
       visit '/admin/posts'
 
       expand_select_box
+      wait_for_ajax
 
       expect(select_box_items).to eq(%w(Music Travel))
     end
 
     it 'allows filtering options by term' do
+      Category.create(name: 'Music')
+      Category.create(name: 'Travel')
+
       visit '/admin/posts'
 
       expand_select_box
-
-      wait_for_ajax do
-        enter_search_term('T')
-      end
+      enter_search_term('T')
+      wait_for_ajax
 
       expect(select_box_items).to eq(%w(Travel))
+    end
+
+    it 'loads more items when scrolling down' do
+      15.times { |i| Category.create(name: "Category #{i}") }
+      visit '/admin/posts'
+
+      expand_select_box
+      wait_for_ajax
+      scroll_select_box_list
+      wait_for_ajax
+
+      expect(select_box_items.size).to eq(15)
     end
   end
 
@@ -63,21 +70,21 @@ RSpec.describe 'end to end', type: :feature, js: true do
     find('.select2-dropdown input').send_keys(term)
   end
 
+  def scroll_select_box_list
+    page.execute_script '$(".select2-container ul").scrollTop(1000)'
+  end
+
   def select_box_items
     all('.select2-dropdown li').map(&:text)
   end
 
-  def wait_for_ajax(count = 1)
-    page.execute_script 'window._ajaxCalls = 0'
-    page.execute_script 'window._ajaxCompleteCounter = function() { window._ajaxCalls += 1; }'
-    page.execute_script '$(document).ajaxComplete(window._ajaxCompleteCounter)'
-
-    yield
-
-    sleep(0.5) until finished_all_ajax_requests?(count)
+  def wait_for_ajax
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      loop until finished_all_ajax_requests?
+    end
   end
 
-  def finished_all_ajax_requests?(count)
-    page.evaluate_script('window._ajaxCalls') == count
+  def finished_all_ajax_requests?
+    page.evaluate_script('jQuery.active').zero?
   end
 end
