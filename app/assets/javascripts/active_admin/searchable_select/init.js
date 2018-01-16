@@ -12,13 +12,24 @@
         $.extend(options, {
           ajax: {
             url: url,
-            dataType: 'json'
+            dataType: 'json',
+
+            data: function (params) {
+              return {
+                term: params.term,
+                page: pageParamWithBaseZero(params)
+              };
+            }
           }
         });
       }
 
       item.select2(options);
     });
+  }
+
+  function pageParamWithBaseZero(params) {
+    return params.page ? params.page - 1 : undefined;
   }
 
   $(document).on('has_many_add:after', '.has_many_container', function(e, fieldset) {
