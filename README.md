@@ -138,7 +138,7 @@ based on the input attribute name, you can pass an object with a
    end
 ```
 
-#### Mutlple Options Endpoints per Resource
+#### Multiple Options Endpoints per Resource
 
 A single ActiveAdmin resource can define multiple options endpoints:
 
@@ -166,6 +166,23 @@ To specify which collection to use, pass an object with a
      end
    end
 ```
+
+#### Querying Multiple Attributes
+
+ActiveAdmin Searchable Select querying is performed by Ransack. As such, you can
+build your query in a way that it can query multiple attributes at once.
+
+```ruby
+   ActiveAdmin.register User do
+     searchable_select_options(scope: User.all,
+                               text_attribute: :username,
+                               filter: lambda do |term, scope|
+                                 scope.ransack(email_or_username_cont: term).result
+                               end)
+   end
+```
+
+In this example, the `all` scope will query `email OR username`.
 
 #### Passing Parameters
 
