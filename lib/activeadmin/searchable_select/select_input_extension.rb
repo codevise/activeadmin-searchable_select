@@ -57,23 +57,23 @@ module ActiveAdmin
       end
 
       def selected_value_collection
-        [selected_value_option].compact
+        selected_value_options.compact
       end
 
-      def selected_value_option
-        option_for_record(selected_record) if selected_record
+      def selected_value_options
+        selected_records.collect{|s| option_for_record(s)}
       end
 
       def option_for_record(record)
         [option_collection.display_text(record), record.id]
       end
 
-      def selected_record
-        @selected_record ||=
-          selected_value && option_collection_scope.find_by_id(selected_value)
+      def selected_records
+        @selected_records ||=
+          selected_values && option_collection_scope.where(id: selected_values)
       end
 
-      def selected_value
+      def selected_values
         @object.send(input_name) if @object
       end
 
