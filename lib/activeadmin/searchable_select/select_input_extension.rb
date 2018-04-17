@@ -57,7 +57,7 @@ module ActiveAdmin
       end
 
       def selected_value_collection
-        selected_value_options.compact
+        selected_value_options.compact if selected_value_options
       end
 
       def selected_value_options
