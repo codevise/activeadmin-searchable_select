@@ -61,7 +61,7 @@ module ActiveAdmin
       end
 
       def selected_value_options
-        selected_records.collect{|s| option_for_record(s)}
+        selected_records.collect{|s| option_for_record(s)} if selected_records
       end
 
       def option_for_record(record)
