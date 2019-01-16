@@ -188,4 +188,54 @@ RSpec.describe 'filter input', type: :request do
                                              text: 'Travel')
     end
   end
+
+  describe 'with the multiple option set to true' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Category) do
+          searchable_select_options(scope: Category, text_attribute: :name)
+        end
+
+        ActiveAdmin.register(Post) do
+          filter(:category,
+                 as: :searchable_select,
+                 ajax: true,
+                 multiple: true)
+        end
+      end
+    end
+
+    it 'renders select input with searchable-select-input css class' do
+      get '/admin/posts'
+
+      expect(response.body).to have_selector('select.searchable-select-input')
+    end
+
+    it 'does not render options statically' do
+      Category.create!(name: 'Travel')
+
+      get '/admin/posts'
+
+      expect(response.body).not_to have_selector('.searchable-select-input option',
+                                                 text: 'Travel')
+    end
+
+    it 'sets data-ajax-url attribute' do
+      get '/admin/posts'
+
+      expect(response.body).to have_selector('.searchable-select-input[data-ajax-url]')
+    end
+
+    it 'renders the filter for multiple values selected' do
+      category1 = Category.create!(name: 'Travel')
+      category2 = Category.create!(name: 'Leisure')
+
+      get "/admin/posts?q[category_id_in][]=#{category1.id}&q[category_id_in][]=#{category2.id}"
+
+      expect(response.body).to have_selector('.searchable-select-input option[selected]',
+                                             text: 'Travel')
+      expect(response.body).to have_selector('.searchable-select-input option[selected]',
+                                             text: 'Leisure')
+    end
+  end
 end
