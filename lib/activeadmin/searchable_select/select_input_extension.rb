@@ -57,7 +57,7 @@ module ActiveAdmin
       end
 
       def selected_value_collection
-        selected_records.collect { |s| option_for_record(s) }.compact
+        selected_records.collect { |s| option_for_record(s) }
       end
 
       def option_for_record(record)
