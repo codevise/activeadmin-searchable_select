@@ -205,10 +205,10 @@ RSpec.describe 'filter input', type: :request do
       end
     end
 
-    it 'renders select input with searchable-select-input css class' do
+    it 'renders select input with searchable-select-input css class and the multiple attribute' do
       get '/admin/posts'
 
-      expect(response.body).to have_selector('select.searchable-select-input')
+      expect(response.body).to have_selector("select.searchable-select-input[multiple='multiple']")
     end
 
     it 'does not render options statically' do
