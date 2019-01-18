@@ -1,14 +1,11 @@
 # CHANGELOG
 
-### Version 1.1.0
+### Unreleased Changes
 
-2019-01-18
+[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-1-stable...master)
 
-[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-0-stable...v1.1.0)
-
-- Allow for multi-select filters
-  ([#11](https://github.com/codevise/activeadmin-searchable_select/pull/11))
+None so far.
 
 See
-[1-0-stable branch](https://github.com/codevise/activeadmin-searchable_select/blob/1-0-stable/CHANGELOG.md)
+[1-1-stable branch](https://github.com/codevise/activeadmin-searchable_select/blob/1-1-stable/CHANGELOG.md)
 for previous changes.
