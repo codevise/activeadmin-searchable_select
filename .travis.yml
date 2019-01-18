@@ -10,7 +10,7 @@ cache:
 
 gemfile:
   - gemfiles/rails_4.2_active_admin_1.0.0.pre4.gemfile
-  - gemfiles/rails_5.1_active_admin_1.0.gemfile
-  - gemfiles/rails_5.1_active_admin_1.1.gemfile
+  - gemfiles/rails_5.1_active_admin_1.x.gemfile
+  - gemfiles/rails_5.x_active_admin_1.x.gemfile
 
 script: bundle exec rspec
