@@ -50,6 +50,15 @@ This also works for filters:
    end
 ```
 
+By default, you can only select one at a time for a filter. You can
+specify a multi-select with:
+
+```ruby
+   ActiveAdmin.register Product do
+     filter(:category, as: :searchable_select, multiple: true)
+   end
+```
+
 ### Fetching Options via Ajax
 
 For large collections, rendering the whole set of options can be to
