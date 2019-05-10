@@ -23,8 +23,8 @@ Import stylesheets and require javascripts:
 ```
 
 ```coffee
-# active_admin.js.coffee
-#= require active_admin/searchable_select
+// active_admin.js
+//= require active_admin/searchable_select
 ```
 
 ## Usage
