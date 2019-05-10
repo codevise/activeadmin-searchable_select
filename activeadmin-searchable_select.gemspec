@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'semmy', '~> 1.0'
   spec.add_development_dependency 'rails'
 
-  spec.add_runtime_dependency 'activeadmin', '~> 1.x'
+  spec.add_runtime_dependency 'activeadmin', ['>= 1.x', '< 3']
   spec.add_runtime_dependency 'jquery-rails', ['>= 3.0', '< 5']
   spec.add_runtime_dependency 'select2-rails', '~> 4.0'
 end
