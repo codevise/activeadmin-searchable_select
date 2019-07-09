@@ -6,6 +6,11 @@
       // reading from data allows <input data-searchable_select='{"tags": ['some']}'>
       // to be passed to select2
       var options = $.extend(extra || {}, item.data('searchableSelect'));
+
+      // default option allow clear
+      if (options.allowClear != undefined)
+        options.allowClear: true
+
       var url = item.data('ajaxUrl');
 
       if (url) {
