@@ -7,7 +7,10 @@
       // to be passed to select2
       var options = $.extend(extra || {}, item.data('searchableSelect'));
 
-      // default option allow clear
+      // default option allow clear (must have placeholder and allowClear to options)
+      if (options.placeholder == undefined)
+        options.placeholder = '';
+
       if (options.allowClear == undefined)
         options.allowClear = true;
 
