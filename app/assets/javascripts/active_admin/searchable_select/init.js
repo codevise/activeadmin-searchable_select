@@ -9,7 +9,7 @@
 
       // default option allow clear
       if (options.allowClear != undefined)
-        options.allowClear: true
+        options.allowClear = true;
 
       var url = item.data('ajaxUrl');
 
