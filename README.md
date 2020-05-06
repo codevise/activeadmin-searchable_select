@@ -12,7 +12,7 @@ allow defining JSON endpoints to fetch options from asynchronously.
 Add `activeadmin-searchable_select` to your Gemfile:
 
 ```ruby
-   gem 'activeadmin-searchable_select
+   gem 'activeadmin-searchable_select'
 ```
 
 Import stylesheets and require javascripts:
