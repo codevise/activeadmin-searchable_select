@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### Version 1.2.1
+
+2020-12-08
+
+[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/v1.2.0...v1.2.1)
+
+- Fix ajax url when active admin namespace is set to false
+  ([#22](https://github.com/codevise/activeadmin-searchable_select/pull/22))
+
 ### Version 1.2.0
 
 2019-05-10
