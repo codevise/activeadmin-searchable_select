@@ -1,7 +1,7 @@
 # ActiveAdmin Searchable Select
 
 [![Gem Version](https://badge.fury.io/rb/activeadmin-searchable_select.svg)](http://badge.fury.io/rb/activeadmin-searchable_select)
-[![Build Status](https://travis-ci.org/codevise/activeadmin-searchable_select.svg?branch=master)](https://travis-ci.org/codevise/activeadmin-searchable_select)
+[![Build Status](https://github.com/codevise/activeadmin-searchable_select.svg?branch=master)](https://github.com/codevise/activeadmin-searchable_select/actions)
 
 Searchable select boxes (via [Select2](https://select2.org/)) for
 ActiveAdmin forms and filters. Extends the ActiveAdmin resource DSL to
