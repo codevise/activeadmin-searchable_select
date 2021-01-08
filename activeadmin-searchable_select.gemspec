@@ -23,11 +23,17 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'combustion', '~> 1.0'
   spec.add_development_dependency 'database_cleaner', '~> 1.6'
   spec.add_development_dependency 'sqlite3', '~> 1.3'
-  spec.add_development_dependency 'capybara', '~> 2.15'
-  spec.add_development_dependency 'poltergeist', '~> 1.15'
+
+  spec.add_development_dependency 'capybara', '~> 3.9'
+  spec.add_development_dependency 'puma', '~> 5.0'
+  spec.add_development_dependency 'selenium-webdriver', '~> 3.6'
+  spec.add_development_dependency 'webdrivers', '~> 4.0'
+
+  spec.add_development_dependency 'coffee-rails'
+  spec.add_development_dependency 'rails'
   spec.add_development_dependency 'rubocop', '~> 0.42.0'
   spec.add_development_dependency 'semmy', '~> 1.0'
-  spec.add_development_dependency 'rails'
+  spec.add_development_dependency 'sprockets', '~> 3.7'
 
   spec.add_runtime_dependency 'activeadmin', ['>= 1.x', '< 3']
   spec.add_runtime_dependency 'jquery-rails', ['>= 3.0', '< 5']
