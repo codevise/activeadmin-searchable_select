@@ -244,6 +244,29 @@ for feature specs:
 
 ```
 
+### Passing options to Select2
+
+It is possible to pass and define configuration options to Select2 
+via `data-attributes` using nested (subkey) options.
+
+Attributes need to be added to the `input_html` option in the form input.
+For example you can tell Select2 how long to wait after a user
+has stopped typing before sending the request:
+
+```ruby
+   ...
+   f.input(:category,
+           as: :searchable_select,
+           ajax: true,
+           input_html: {
+             data: {
+               'ajax--delay' => 500
+             }
+           })
+   ...
+```
+
+
 ## Development
 
 To run the tests install bundled gems and invoke RSpec:
