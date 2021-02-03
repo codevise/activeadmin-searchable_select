@@ -20,6 +20,17 @@ ActiveRecord::Schema.define do
     t.boolean :published
   end
 
+  create_table(:rgb_colors, force: true) do |t|
+    t.string :code
+    t.text :description
+  end
+
+  create_table(:internal_tag_names, force: true) do |t|
+    t.string :name
+    t.text :description
+    t.integer :color_id
+  end
+
   create_table(:users, force: true) do |t|
     t.string :name
   end

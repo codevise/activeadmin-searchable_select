@@ -13,6 +13,20 @@ class Post < ActiveRecord::Base
   scope(:published, -> { where(published: true) })
 end
 
+module RGB
+  class Color < ActiveRecord::Base
+    self.table_name = :rgb_colors
+    has_many :tags, class_name: 'Internal::TagName'
+  end
+end
+
+module Internal
+  class TagName < ActiveRecord::Base
+    self.table_name = :internal_tag_names
+    belongs_to :color, class_name: 'RGB::Color', foreign_key: :color_id
+  end
+end
+
 RSpec.configure do |config|
   config.after do
     DatabaseCleaner.strategy = :truncation

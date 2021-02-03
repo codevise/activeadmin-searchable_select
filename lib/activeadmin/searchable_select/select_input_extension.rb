@@ -45,9 +45,19 @@ module ActiveAdmin
 
       def ajax_url
         return unless options[:ajax]
-        template.polymorphic_path([template.active_admin_namespace.route_prefix, ajax_resource_class],
+        template.polymorphic_path([active_admin_prefix, resource_route_name || ajax_resource_class],
                                   action: option_collection.collection_action_name,
                                   **ajax_params)
+      end
+
+      def active_admin_prefix
+        template.active_admin_namespace.route_prefix
+      end
+
+      def resource_route_name
+        active_admin_namespace = template.active_admin_namespace
+        str = active_admin_namespace.resource_for(ajax_resource_class)&.route_collection_path
+        str&.split('/')&.last
       end
 
       def all_options_collection

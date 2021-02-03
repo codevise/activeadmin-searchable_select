@@ -5,60 +5,100 @@ require 'support/capybara'
 require 'support/active_admin_helpers'
 
 RSpec.describe 'end to end', type: :feature, js: true do
-  before(:each) do
-    ActiveAdminHelpers.setup do
-      ActiveAdmin.register(Category) do
-        searchable_select_options(scope: Category, text_attribute: :name)
-      end
-
-      ActiveAdmin.register(Post) do
-        filter(:category, as: :searchable_select, ajax: true)
-
-        form do |f|
-          f.input(:category, as: :searchable_select, ajax: true)
+  context 'class name without namespaces' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register(Category) do
+          searchable_select_options(scope: Category, text_attribute: :name)
         end
+
+        ActiveAdmin.register(Post) do
+          filter(:category, as: :searchable_select, ajax: true)
+
+          form do |f|
+            f.input(:category, as: :searchable_select, ajax: true)
+          end
+        end
+
+        ActiveAdmin.setup {}
+      end
+    end
+
+    describe 'index page with searchable select filter' do
+      it 'loads filter input options' do
+        Category.create(name: 'Music')
+        Category.create(name: 'Travel')
+
+        visit '/admin/posts'
+
+        expand_select_box
+        wait_for_ajax
+
+        expect(select_box_items).to eq(%w(Music Travel))
       end
 
-      ActiveAdmin.setup {}
+      it 'allows filtering options by term' do
+        Category.create(name: 'Music')
+        Category.create(name: 'Travel')
+
+        visit '/admin/posts'
+
+        expand_select_box
+        enter_search_term('T')
+        wait_for_ajax
+
+        expect(select_box_items).to eq(%w(Travel))
+      end
+
+      it 'loads more items when scrolling down' do
+        15.times { |i| Category.create(name: "Category #{i}") }
+        visit '/admin/posts'
+
+        expand_select_box
+        wait_for_ajax
+        scroll_select_box_list
+        wait_for_ajax
+
+        expect(select_box_items.size).to eq(15)
+      end
     end
   end
 
-  describe 'index page with searchable select filter' do
-    it 'loads filter input options' do
-      Category.create(name: 'Music')
-      Category.create(name: 'Travel')
+  context 'class name with namespace' do
+    before(:each) do
+      ActiveAdminHelpers.setup do
+        ActiveAdmin.register RGB::Color, as: 'color' do
+          searchable_select_options scope: RGB::Color, text_attribute: :code
+        end
 
-      visit '/admin/posts'
+        ActiveAdmin.register Internal::TagName, as: 'Tag Name' do
+          filter :color, as: :searchable_select, ajax: { resource: 'RGB::Color' }
+        end
 
-      expand_select_box
-      wait_for_ajax
-
-      expect(select_box_items).to eq(%w(Music Travel))
+        ActiveAdmin::SearchableSelect.inline_ajax_options = true
+        ActiveAdmin.setup {}
+      end
     end
 
-    it 'allows filtering options by term' do
-      Category.create(name: 'Music')
-      Category.create(name: 'Travel')
+    describe 'index page with searchable select filter' do
+      let!(:orange) { RGB::Color.create(code: '#eac112', description: 'Orange') }
+      let(:filters_options) { %w(Any #19bf25 #eac112) }
 
-      visit '/admin/posts'
+      let!(:other_records) do
+        RGB::Color.create(code: '#19bf25', description: 'Green')
+        Internal::TagName.create(name: 'Important Guest', color: orange)
+      end
 
-      expand_select_box
-      enter_search_term('T')
-      wait_for_ajax
+      before { visit '/admin/tag_names' }
 
-      expect(select_box_items).to eq(%w(Travel))
-    end
+      it 'should have all created colors in filter' do
+        expect(page).to have_select :Color, options: filters_options
+      end
 
-    it 'loads more items when scrolling down' do
-      15.times { |i| Category.create(name: "Category #{i}") }
-      visit '/admin/posts'
-
-      expand_select_box
-      wait_for_ajax
-      scroll_select_box_list
-      wait_for_ajax
-
-      expect(select_box_items.size).to eq(15)
+      it 'should have selected option' do
+        select orange.code, from: :Color
+        expect(page).to have_select :Color, selected: orange.code
+      end
     end
   end
 
