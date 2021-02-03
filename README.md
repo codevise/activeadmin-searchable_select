@@ -238,7 +238,7 @@ for feature specs:
 ```ruby
   RSpec.configure do |config|
     config.before(:each) do |example|
-      ActiveAdmin::Select2.inline_ajax_options = (example.metadata[:type] == :feature)
+      ActiveAdmin::SearchableSelect.inline_ajax_options = (example.metadata[:type] == :feature)
     end
   end
 
