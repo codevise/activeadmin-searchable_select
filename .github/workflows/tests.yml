@@ -15,6 +15,10 @@ jobs:
           - gemfiles/rails_5.1_active_admin_1.x.gemfile
           - gemfiles/rails_5.x_active_admin_1.x.gemfile
           - gemfiles/rails_5.x_active_admin_2.x.gemfile
+          - gemfiles/rails_6.x_active_admin_2.x.gemfile
+        include:
+          - ruby-version: '3.0'
+            gemfile: gemfiles/rails_6.x_active_admin_2.x.gemfile
 
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
