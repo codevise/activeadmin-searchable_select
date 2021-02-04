@@ -45,7 +45,7 @@ module ActiveAdmin
 
       def ajax_url
         return unless options[:ajax]
-        [ajax_resource.route_collection_path,
+        [template.active_admin_namespace.resource_for(ajax_resource_class)&.route_collection_path,
          '/',
          option_collection.collection_action_name,
          '?',
