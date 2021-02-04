@@ -72,32 +72,24 @@ RSpec.describe 'end to end', type: :feature, js: true do
         end
 
         ActiveAdmin.register Internal::TagName, as: 'Tag Name' do
-          filter :color, as: :searchable_select, ajax: { resource: 'RGB::Color' }
+          filter :color, as: :searchable_select, ajax: { resource: RGB::Color }
         end
 
-        ActiveAdmin::SearchableSelect.inline_ajax_options = true
         ActiveAdmin.setup {}
       end
     end
 
     describe 'index page with searchable select filter' do
-      let!(:orange) { RGB::Color.create(code: '#eac112', description: 'Orange') }
-      let(:filters_options) { %w(Any #19bf25 #eac112) }
-
-      let!(:other_records) do
+      it 'loads filter input options' do
+        RGB::Color.create(code: '#eac112', description: 'Orange')
         RGB::Color.create(code: '#19bf25', description: 'Green')
-        Internal::TagName.create(name: 'Important Guest', color: orange)
-      end
 
-      before { visit '/admin/tag_names' }
+        visit '/admin/tag_names'
 
-      it 'should have all created colors in filter' do
-        expect(page).to have_select :Color, options: filters_options
-      end
+        expand_select_box
+        wait_for_ajax
 
-      it 'should have selected option' do
-        select orange.code, from: :Color
-        expect(page).to have_select :Color, selected: orange.code
+        expect(select_box_items).to eq(%w(#eac112 #19bf25))
       end
     end
   end
