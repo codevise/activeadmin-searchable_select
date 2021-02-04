@@ -1,5 +1,7 @@
 AllCops:
   TargetRubyVersion: 2.3
+  Exclude:
+    - 'bin/**/*'
 
 # The default of 80 characters is a little to narrow.
 Metrics/LineLength:
