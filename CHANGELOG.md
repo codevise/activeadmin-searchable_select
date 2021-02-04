@@ -1,10 +1,15 @@
 # CHANGELOG
 
-### Unreleased Changes
+### Version 1.4.0
 
-[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-3-stable...master)
+2021-02-04
 
-None so far.
+[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-3-stable...v1.4.0)
+
+- Support admin resources for namespaced models.
+  ([#30](https://github.com/codevise/activeadmin-searchable_select/pull/30))
+- Improve README.md
+  ([#28](https://github.com/codevise/activeadmin-searchable_select/pull/28))
 
 See
 [1-3-stable branch](https://github.com/codevise/activeadmin-searchable_select/blob/1-3-stable/CHANGELOG.md)
