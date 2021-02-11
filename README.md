@@ -193,6 +193,25 @@ build your query in a way that it can query multiple attributes at once.
 
 In this example, the `all` scope will query `email OR username`.
 
+You can add the additional payload as dsl option:
+
+```ruby
+   ActiveAdmin.register Category do
+     searchable_select_options(scope: Category.all,
+                               text_attribute: :name,
+                               additional_payload: ->(record) { { foo: record.bar } } )
+   end
+```
+
+response example which uses additional_payload:
+
+```json
+{
+  "results": [{ "id": "1", "text": "Bicycles", "foo": "Bar" }],
+  "pagination": { "more": "false" }
+}
+```
+
 #### Passing Parameters
 
 You can pass additional parameters to the options endpoint:
