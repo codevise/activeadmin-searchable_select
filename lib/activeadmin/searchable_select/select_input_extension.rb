@@ -45,7 +45,7 @@ module ActiveAdmin
 
       def ajax_url
         return unless options[:ajax]
-        [ajax_resource.route_collection_path,
+        [ajax_resource.route_collection_path(path_params),
          '/',
          option_collection.collection_action_name,
          '?',
@@ -122,6 +122,10 @@ module ActiveAdmin
 
       def ajax_params
         ajax_options.fetch(:params, {})
+      end
+
+      def path_params
+        options[:path_params]
       end
 
       def ajax_options
