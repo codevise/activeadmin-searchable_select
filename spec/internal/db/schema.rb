@@ -31,6 +31,26 @@ ActiveRecord::Schema.define do
     t.integer :color_id
   end
 
+  create_table(:option_types, force: true) do |t|
+    t.string :name
+  end
+
+  create_table(:option_values, force: true) do |t|
+    t.string :value
+    t.belongs_to :option_type
+  end
+
+  create_table(:products, force: true) do |t|
+    t.string :name
+    t.belongs_to :option_type
+  end
+
+  create_table(:variants, force: true) do |t|
+    t.integer :price
+    t.belongs_to :product
+    t.belongs_to :option_value
+  end
+
   create_table(:users, force: true) do |t|
     t.string :name
   end

@@ -27,6 +27,22 @@ module Internal
   end
 end
 
+class OptionType < ActiveRecord::Base; end
+
+class OptionValue < ActiveRecord::Base
+  belongs_to :option_type
+end
+
+class Product < ActiveRecord::Base
+  belongs_to :option_type
+  has_many :variants
+end
+
+class Variant < ActiveRecord::Base
+  belongs_to :product
+  belongs_to :option_value
+end
+
 RSpec.configure do |config|
   config.after do
     DatabaseCleaner.strategy = :truncation

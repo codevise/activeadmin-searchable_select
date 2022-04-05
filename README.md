@@ -242,6 +242,67 @@ argument:
    end
 ```
 
+#### Path options for nested resources
+
+Example for the following setup:
+
+```ruby
+# Models
+class OptionType < ActiveRecord::Base; end
+
+class OptionValue < ActiveRecord::Base
+  belongs_to :option_type
+end
+
+class Product < ActiveRecord::Base
+  belongs_to :option_type
+  has_many :variants
+end
+
+class Variant < ActiveRecord::Base
+  belongs_to :product
+  belongs_to :option_value
+end
+
+# ActiveAdmin
+ActiveAdmin.register(OptionType)
+
+ActiveAdmin.register(Product)
+
+ActiveAdmin.register(OptionValue) do
+  belongs_to :option_type
+  searchable_select_options(scope: lambda do |params|
+                                     OptionValue.where(
+                                       option_type_id: params[:option_type_id]
+                                     )
+                                   end,
+                            text_attribute: :value)
+end
+```
+
+It is possible to pass path parameters for correctly generating URLs for nested resources fetching via `path_params`
+
+```ruby
+ActiveAdmin.register(Variant) do
+  belongs_to :product
+
+  form do |f|
+    ...
+    f.input(:option_value,
+            as: :searchable_select,
+            ajax: {
+              resource: OptionValue,
+              path_params: {
+                option_type_id: f.object.product.option_type_id
+              }
+            })
+    ...
+  end
+end
+```
+
+This will generate the path for fetching as `all_options_admin_option_type_option_values(option_type_id: f.object.product.option_type_id)` (e.g. `/admin/option_types/2/option_values/all_options`)
+
 #### Inlining Ajax Options in Feature Tests
 
 When writing UI driven feature specs (i.e. with Capybara),
@@ -265,7 +326,7 @@ for feature specs:
 
 ### Passing options to Select2
 
-It is possible to pass and define configuration options to Select2 
+It is possible to pass and define configuration options to Select2
 via `data-attributes` using nested (subkey) options.
 
 Attributes need to be added to the `input_html` option in the form input.

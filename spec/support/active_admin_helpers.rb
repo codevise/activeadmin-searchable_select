@@ -1,9 +1,13 @@
 module ActiveAdminHelpers
   module_function
 
+  def reload_routes!
+    Rails.application.reload_routes!
+  end
+
   def setup
     ActiveAdmin.application = nil
     yield
-    Rails.application.reload_routes!
+    reload_routes!
   end
 end
