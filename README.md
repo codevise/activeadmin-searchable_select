@@ -242,50 +242,7 @@ argument:
    end
 ```
 
-#### Inlining Ajax Options in Feature Tests
-
-When writing UI driven feature specs (i.e. with Capybara),
-asynchronous loading of select options can increase test
-complexity. `activeadmin-searchable_select` provides an option to
-render all available options just like a normal select input while
-still exercsing the same code paths including `scope` and
-`text_attribute` handling.
-
-For example with RSpec/Capybara, simply set `inline_ajax_options` true
-for feature specs:
-
-```ruby
-  RSpec.configure do |config|
-    config.before(:each) do |example|
-      ActiveAdmin::SearchableSelect.inline_ajax_options = (example.metadata[:type] == :feature)
-    end
-  end
-
-```
-
-### Passing options to Select2
-
-It is possible to pass and define configuration options to Select2
-via `data-attributes` using nested (subkey) options.
-
-Attributes need to be added to the `input_html` option in the form input.
-For example you can tell Select2 how long to wait after a user
-has stopped typing before sending the request:
-
-```ruby
-   ...
-   f.input(:category,
-           as: :searchable_select,
-           ajax: true,
-           input_html: {
-             data: {
-               'ajax--delay' => 500
-             }
-           })
-   ...
-```
-
-### Path options for nested resources
+#### Path options for nested resources
 
 Example for the following setup:
 
@@ -333,16 +290,61 @@ ActiveAdmin.register(Variant) do
     ...
     f.input(:option_value,
             as: :searchable_select,
-            path_params: {
-              option_type_id: f.object.product.option_type_id
-            },
-            ajax: { resource: OptionValue })
+            ajax: {
+              resource: OptionValue,
+              path_params: {
+                option_type_id: f.object.product.option_type_id
+              }
+            })
     ...
   end
 end
 ```
 
 This will generate the path for fetching as `all_options_admin_option_type_option_values(option_type_id: f.object.product.option_type_id)` (e.g. `/admin/option_types/2/option_values/all_options`)
+
+#### Inlining Ajax Options in Feature Tests
+
+When writing UI driven feature specs (i.e. with Capybara),
+asynchronous loading of select options can increase test
+complexity. `activeadmin-searchable_select` provides an option to
+render all available options just like a normal select input while
+still exercsing the same code paths including `scope` and
+`text_attribute` handling.
+
+For example with RSpec/Capybara, simply set `inline_ajax_options` true
+for feature specs:
+
+```ruby
+  RSpec.configure do |config|
+    config.before(:each) do |example|
+      ActiveAdmin::SearchableSelect.inline_ajax_options = (example.metadata[:type] == :feature)
+    end
+  end
+
+```
+
+### Passing options to Select2
+
+It is possible to pass and define configuration options to Select2
+via `data-attributes` using nested (subkey) options.
+
+Attributes need to be added to the `input_html` option in the form input.
+For example you can tell Select2 how long to wait after a user
+has stopped typing before sending the request:
+
+```ruby
+   ...
+   f.input(:category,
+           as: :searchable_select,
+           ajax: true,
+           input_html: {
+             data: {
+               'ajax--delay' => 500
+             }
+           })
+   ...
+```
 
 
 ## Development

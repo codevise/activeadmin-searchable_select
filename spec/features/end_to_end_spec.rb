@@ -95,7 +95,7 @@ RSpec.describe 'end to end', type: :feature, js: true do
   end
 
   context 'class with nested belongs_to association' do
-    before(:each) do
+    before(:all) do
       ActiveAdminHelpers.setup do
         ActiveAdmin.register(OptionType)
 
@@ -118,9 +118,11 @@ RSpec.describe 'end to end', type: :feature, js: true do
             input :price
             input(:option_value,
                   as: :searchable_select,
-                  path_params: { option_type_id: f.object.product.option_type_id },
                   ajax: {
-                    resource: OptionValue
+                    resource: OptionValue,
+                    path_params: {
+                      option_type_id: f.object.product.option_type_id
+                    }
                   })
           end
         end
