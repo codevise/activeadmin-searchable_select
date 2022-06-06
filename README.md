@@ -1,6 +1,8 @@
 # ActiveAdmin Searchable Select
 
 [![Gem Version](https://badge.fury.io/rb/activeadmin-searchable_select.svg)](http://badge.fury.io/rb/activeadmin-searchable_select)
+[![NPM Version](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select.svg)](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select)
+![npm](https://img.shields.io/npm/dm/@codevise/activeadmin-searchable_select)
 [![Build Status](https://github.com/codevise/activeadmin-searchable_select.svg?branch=master)](https://github.com/codevise/activeadmin-searchable_select/actions)
 
 Searchable select boxes (via [Select2](https://select2.org/)) for
@@ -15,6 +17,7 @@ Add `activeadmin-searchable_select` to your Gemfile:
    gem 'activeadmin-searchable_select'
 ```
 
+##### Using assets via Sprockets
 Import stylesheets and require javascripts:
 
 ```scss
@@ -25,6 +28,39 @@ Import stylesheets and require javascripts:
 ```coffee
 // active_admin.js
 //= require active_admin/searchable_select
+```
+
+##### Using assets via Webpacker (or any other assets bundler) as a NPM module (Yarn package)
+
+Execute:
+
+    $ npm i @codevise/activeadmin-searchable_select
+
+Or
+
+    $ yarn add @codevise/activeadmin-searchable_select
+
+Or add manually to `package.json`:
+
+```json
+"dependencies": {
+  "@codevise/activeadmin-searchable_select": "1.6.0"
+}
+```
+and execute:
+
+    $ yarn
+
+Add the following line into `app/assets/javascripts/active_admin.js`:
+
+```javascript
+import '@codevise/activeadmin-searchable_select';
+```
+
+Add the following line into `app/assets/stylesheets/active_admin.scss`:
+
+```css
+@import '@codevise/activeadmin-searchable_select';
 ```
 
 ## Usage
