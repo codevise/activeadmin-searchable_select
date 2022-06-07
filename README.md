@@ -51,13 +51,13 @@ and execute:
 
     $ yarn
 
-Add the following line into `app/assets/javascripts/active_admin.js`:
+Add the following line into `app/javascript/active_admin.js`:
 
 ```javascript
 import '@codevise/activeadmin-searchable_select';
 ```
 
-Add the following line into `app/assets/stylesheets/active_admin.scss`:
+Add the following line into `app/javascript/stylesheets/active_admin.scss`:
 
 ```css
 @import '@codevise/activeadmin-searchable_select';
