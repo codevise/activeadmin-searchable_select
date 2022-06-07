@@ -1,0 +1,38 @@
+{
+  "name": "@codevise/activeadmin-searchable_select",
+  "version": "1.6.0",
+  "description": "Use searchable selects based on Select2 in Active Admin forms and filters.",
+  "main": "src/searchable_select.js",
+  "style": "src/searchable_select.scss",
+  "repository": "git@github.com:codevise/activeadmin-searchable_select.git",
+  "author": "Codevise Solutions Ltd <info@codevise.de>",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codevise/activeadmin-searchable_select.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codevise/activeadmin-searchable_select/issues"
+  },
+  "homepage": "https://github.com/codevise/activeadmin-searchable_select#readme",
+  "keywords": [
+    "select2",
+    "active",
+    "admin",
+    "searchable",
+    "select"
+  ],
+  "dependencies": {
+    "jquery": ">= 3.0, < 5",
+    "select2": "~> 4.0"
+  },
+  "files": [
+    "src/**/*"
+  ],
+  "scripts": {
+    "prepare_javascripts_src": "rm -rf src && cp -R app/assets/javascripts/active_admin/ src && mv src/searchable_select_pack.js src/searchable_select.js",
+    "prepare_stylesheets_src": "cp -R app/assets/stylesheets/active_admin/ src",
+    "prepublishOnly": "npm run prepare_javascripts_src && npm run prepare_stylesheets_src"
+  }
+}
