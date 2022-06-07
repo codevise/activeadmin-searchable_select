@@ -1,6 +1,6 @@
 {
   "name": "@codevise/activeadmin-searchable_select",
-  "version": "1.6.0",
+  "version": "1.6.0.1",
   "description": "Use searchable selects based on Select2 in Active Admin forms and filters.",
   "main": "src/searchable_select.js",
   "style": "src/searchable_select.scss",
@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "prepare_javascripts_src": "rm -rf src && cp -R app/assets/javascripts/active_admin/ src && mv src/searchable_select_pack.js src/searchable_select.js",
-    "prepare_stylesheets_src": "cp -R app/assets/stylesheets/active_admin/ src",
+    "prepare_stylesheets_src": "cp -R app/assets/stylesheets/active_admin/* src",
     "prepublishOnly": "npm run prepare_javascripts_src && npm run prepare_stylesheets_src"
   }
 }
