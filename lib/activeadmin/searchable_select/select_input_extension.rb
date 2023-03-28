@@ -84,7 +84,7 @@ module ActiveAdmin
       end
 
       def option_collection_scope
-        option_collection.scope(template, ajax_params)
+        option_collection.scope(template, path_params.merge(ajax_params))
       end
 
       def option_collection
