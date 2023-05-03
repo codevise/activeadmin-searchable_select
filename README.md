@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/activeadmin-searchable_select.svg)](http://badge.fury.io/rb/activeadmin-searchable_select)
 [![NPM Version](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select.svg)](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select)
-![npm](https://img.shields.io/npm/dm/@codevise/activeadmin-searchable_select)
+[![npm](https://img.shields.io/npm/dm/@codevise/activeadmin-searchable_select)](https://www.npmjs.com/package/@codevise/activeadmin-searchable_select)
 [![Build Status](https://github.com/codevise/activeadmin-searchable_select.svg?branch=master)](https://github.com/codevise/activeadmin-searchable_select/actions)
 
 Searchable select boxes (via [Select2](https://select2.org/)) for
