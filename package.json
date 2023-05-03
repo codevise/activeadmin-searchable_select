@@ -1,6 +1,6 @@
 {
   "name": "@codevise/activeadmin-searchable_select",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Use searchable selects based on Select2 in Active Admin forms and filters.",
   "main": "src/searchable_select.js",
   "style": "src/searchable_select.scss",
