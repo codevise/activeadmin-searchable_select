@@ -180,6 +180,22 @@ RSpec.describe 'end to end', type: :feature, js: true do
         expect(select_box_items.size).to eq(15)
       end
     end
+
+    describe 'edit page with searchable select filter' do
+      it 'preselects item' do
+        option_type = OptionType.create(name: 'Color')
+        ot = OptionType.create(name: 'Size')
+        option_value = OptionValue.create(value: 'Black', option_type: option_type)
+        OptionValue.create(value: 'Orange', option_type: option_type)
+        OptionValue.create(value: 'M', option_type: ot)
+        product = Product.create(name: 'Cap', option_type: option_type)
+        variant = Variant.create(product: product, option_value: option_value)
+
+        visit "/admin/products/#{product.id}/variants/#{variant.id}/edit"
+
+        expect(select_box_selected_item_text).to eq('Black')
+      end
+    end
   end
 
   def expand_select_box
@@ -196,6 +212,10 @@ RSpec.describe 'end to end', type: :feature, js: true do
 
   def select_box_items
     all('.select2-dropdown li').map(&:text)
+  end
+
+  def select_box_selected_item_text
+    find('.select2-selection').text
   end
 
   def wait_for_ajax
