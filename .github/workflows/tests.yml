@@ -23,6 +23,8 @@ jobs:
         include:
           - ruby-version: '3.0'
             gemfile: gemfiles/rails_6.x_active_admin_2.x.gemfile
+          - ruby-version: '3.0'
+            gemfile: gemfiles/rails_6.x_active_admin_3.x.gemfile
 
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}

@@ -4,6 +4,10 @@ class User < ActiveRecord::Base; end
 
 class Category < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
+
+  def self.ransackable_attributes(_auth_object = nil)
+    ['name']
+  end
 end
 
 class Post < ActiveRecord::Base
@@ -11,6 +15,10 @@ class Post < ActiveRecord::Base
   belongs_to :user
 
   scope(:published, -> { where(published: true) })
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w(category_id title)
+  end
 end
 
 module RGB
@@ -24,6 +32,10 @@ module Internal
   class TagName < ActiveRecord::Base
     self.table_name = :internal_tag_names
     belongs_to :color, class_name: 'RGB::Color', foreign_key: :color_id
+
+    def self.ransackable_attributes(_auth_object = nil)
+      ['color_id']
+    end
   end
 end
 
@@ -31,6 +43,10 @@ class OptionType < ActiveRecord::Base; end
 
 class OptionValue < ActiveRecord::Base
   belongs_to :option_type
+
+  def self.ransackable_attributes(_auth_object = nil)
+    ['value']
+  end
 end
 
 class Product < ActiveRecord::Base
