@@ -4,14 +4,13 @@
   "description": "Use searchable selects based on Select2 in Active Admin forms and filters.",
   "main": "src/searchable_select.js",
   "style": "src/searchable_select.scss",
-  "repository": "git@github.com:codevise/activeadmin-searchable_select.git",
-  "author": "Codevise Solutions Ltd <info@codevise.de>",
-  "license": "MIT",
-  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codevise/activeadmin-searchable_select.git"
   },
+  "author": "Codevise Solutions Ltd <info@codevise.de>",
+  "license": "MIT",
+  "private": false,
   "bugs": {
     "url": "https://github.com/codevise/activeadmin-searchable_select/issues"
   },

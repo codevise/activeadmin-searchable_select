@@ -7,3 +7,5 @@ Gemfile.lock
 /spec/internal/tmp
 /spec/internal/db/*.sqlite
 /spec/examples.txt
+/src
+/node_modules
