@@ -26,8 +26,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'capybara', '~> 3.9'
   spec.add_development_dependency 'puma', '~> 5.0'
-  spec.add_development_dependency 'selenium-webdriver', '~> 3.6'
-  spec.add_development_dependency 'webdrivers', '~> 4.0'
+  spec.add_development_dependency 'selenium-webdriver', '~> 4.1'
+  spec.add_development_dependency 'webdrivers', '= 5.3.0'
 
   spec.add_development_dependency 'coffee-rails'
   spec.add_development_dependency 'rails'
