@@ -8,6 +8,10 @@ class Category < ActiveRecord::Base
   def self.ransackable_attributes(_auth_object = nil)
     ['name']
   end
+
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
 end
 
 class Post < ActiveRecord::Base
@@ -18,6 +22,10 @@ class Post < ActiveRecord::Base
 
   def self.ransackable_attributes(_auth_object = nil)
     %w(category_id title)
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    []
   end
 end
 
@@ -36,6 +44,10 @@ module Internal
     def self.ransackable_attributes(_auth_object = nil)
       ['color_id']
     end
+
+    def self.ransackable_associations(_auth_object = nil)
+      []
+    end
   end
 end
 
@@ -46,6 +58,10 @@ class OptionValue < ActiveRecord::Base
 
   def self.ransackable_attributes(_auth_object = nil)
     ['value']
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    []
   end
 end
 
