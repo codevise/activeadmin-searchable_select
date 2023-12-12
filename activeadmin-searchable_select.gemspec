@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'appraisal', '~> 2.2'
   spec.add_development_dependency 'rspec-rails', '~> 3.6'
   spec.add_development_dependency 'combustion', '~> 1.0'
-  spec.add_development_dependency 'database_cleaner', '~> 1.6'
+  spec.add_development_dependency 'database_cleaner-active_record', '~> 2.1'
   spec.add_development_dependency 'sqlite3', '~> 1.3'
 
   spec.add_development_dependency 'capybara', '~> 3.9'
