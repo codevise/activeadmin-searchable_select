@@ -60,6 +60,7 @@ module ActiveAdmin
 
       def paginate(scope, page_index)
         page_index = page_index.to_i
+        page_index = page_index.positive? ? page_index - 1 : page_index
 
         records = scope.limit(per_page + 1).offset(page_index * per_page).to_a
 
