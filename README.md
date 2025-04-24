@@ -1,7 +1,9 @@
 # ActiveAdmin Searchable Select
 
 [![Gem Version](https://badge.fury.io/rb/activeadmin-searchable_select.svg)](http://badge.fury.io/rb/activeadmin-searchable_select)
-[![Build Status](https://travis-ci.org/codevise/activeadmin-searchable_select.svg?branch=master)](https://travis-ci.org/codevise/activeadmin-searchable_select)
+[![NPM Version](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select.svg)](https://badge.fury.io/js/@codevise%2Factiveadmin-searchable_select)
+[![npm](https://img.shields.io/npm/dm/@codevise/activeadmin-searchable_select)](https://www.npmjs.com/package/@codevise/activeadmin-searchable_select)
+[![Build Status](https://github.com/codevise/activeadmin-searchable_select/actions/workflows/tests.yml/badge.svg)](https://github.com/codevise/activeadmin-searchable_select/actions)
 
 Searchable select boxes (via [Select2](https://select2.org/)) for
 ActiveAdmin forms and filters. Extends the ActiveAdmin resource DSL to
@@ -12,9 +14,10 @@ allow defining JSON endpoints to fetch options from asynchronously.
 Add `activeadmin-searchable_select` to your Gemfile:
 
 ```ruby
-   gem 'activeadmin-searchable_select
+   gem 'activeadmin-searchable_select'
 ```
 
+##### Using assets via Sprockets
 Import stylesheets and require javascripts:
 
 ```scss
@@ -25,6 +28,39 @@ Import stylesheets and require javascripts:
 ```coffee
 // active_admin.js
 //= require active_admin/searchable_select
+```
+
+##### Using assets via Webpacker (or any other assets bundler) as a NPM module (Yarn package)
+
+Execute:
+
+    $ npm i @codevise/activeadmin-searchable_select
+
+Or
+
+    $ yarn add @codevise/activeadmin-searchable_select
+
+Or add manually to `package.json`:
+
+```json
+"dependencies": {
+  "@codevise/activeadmin-searchable_select": "1.6.0"
+}
+```
+and execute:
+
+    $ yarn
+
+Add the following line into `app/javascript/active_admin.js`:
+
+```javascript
+import '@codevise/activeadmin-searchable_select';
+```
+
+Add the following line into `app/javascript/stylesheets/active_admin.scss`:
+
+```css
+@import '@codevise/activeadmin-searchable_select';
 ```
 
 ## Usage
@@ -193,6 +229,25 @@ build your query in a way that it can query multiple attributes at once.
 
 In this example, the `all` scope will query `email OR username`.
 
+You can add the additional payload as dsl option:
+
+```ruby
+   ActiveAdmin.register Category do
+     searchable_select_options(scope: Category.all,
+                               text_attribute: :name,
+                               additional_payload: ->(record) { { foo: record.bar } } )
+   end
+```
+
+response example which uses additional_payload:
+
+```json
+{
+  "results": [{ "id": "1", "text": "Bicycles", "foo": "Bar" }],
+  "pagination": { "more": "false" }
+}
+```
+
 #### Passing Parameters
 
 You can pass additional parameters to the options endpoint:
@@ -223,6 +278,67 @@ argument:
    end
 ```
 
+#### Path options for nested resources
+
+Example for the following setup:
+
+```ruby
+# Models
+class OptionType < ActiveRecord::Base; end
+
+class OptionValue < ActiveRecord::Base
+  belongs_to :option_type
+end
+
+class Product < ActiveRecord::Base
+  belongs_to :option_type
+  has_many :variants
+end
+
+class Variant < ActiveRecord::Base
+  belongs_to :product
+  belongs_to :option_value
+end
+
+# ActiveAdmin
+ActiveAdmin.register(OptionType)
+
+ActiveAdmin.register(Product)
+
+ActiveAdmin.register(OptionValue) do
+  belongs_to :option_type
+  searchable_select_options(scope: lambda do |params|
+                                     OptionValue.where(
+                                       option_type_id: params[:option_type_id]
+                                     )
+                                   end,
+                            text_attribute: :value)
+end
+```
+
+It is possible to pass path parameters for correctly generating URLs for nested resources fetching via `path_params`
+
+```ruby
+ActiveAdmin.register(Variant) do
+  belongs_to :product
+
+  form do |f|
+    ...
+    f.input(:option_value,
+            as: :searchable_select,
+            ajax: {
+              resource: OptionValue,
+              path_params: {
+                option_type_id: f.object.product.option_type_id
+              }
+            })
+    ...
+  end
+end
+```
+
+This will generate the path for fetching as `all_options_admin_option_type_option_values(option_type_id: f.object.product.option_type_id)` (e.g. `/admin/option_types/2/option_values/all_options`)
+
 #### Inlining Ajax Options in Feature Tests
 
 When writing UI driven feature specs (i.e. with Capybara),
@@ -238,11 +354,34 @@ for feature specs:
 ```ruby
   RSpec.configure do |config|
     config.before(:each) do |example|
-      ActiveAdmin::Select2.inline_ajax_options = (example.metadata[:type] == :feature)
+      ActiveAdmin::SearchableSelect.inline_ajax_options = (example.metadata[:type] == :feature)
     end
   end
 
 ```
+
+### Passing options to Select2
+
+It is possible to pass and define configuration options to Select2
+via `data-attributes` using nested (subkey) options.
+
+Attributes need to be added to the `input_html` option in the form input.
+For example you can tell Select2 how long to wait after a user
+has stopped typing before sending the request:
+
+```ruby
+   ...
+   f.input(:category,
+           as: :searchable_select,
+           ajax: true,
+           input_html: {
+             data: {
+               'ajax--delay' => 500
+             }
+           })
+   ...
+```
+
 
 ## Development
 

@@ -8,6 +8,7 @@ module ActiveAdmin
         @display_text = extract_display_text_option(options)
         @filter = extract_filter_option(options)
         @per_page = options.fetch(:per_page, 10)
+        @additional_payload = options.fetch(:additional_payload, {})
       end
 
       def scope(template, params)
@@ -38,7 +39,7 @@ module ActiveAdmin
           {
             id: record.id,
             text: display_text(record)
-          }
+          }.merge(hash_of_additional_payload(record) || {})
         end
 
         { results: results, pagination: { more: more } }
@@ -97,6 +98,21 @@ module ActiveAdmin
 
           ->(term, scope) { scope.ransack("#{text_attribute}_cont" => term).result }
         end
+      end
+
+      def build_additional_payload(record)
+        case @additional_payload
+        when Proc
+          @additional_payload.call(record).to_h
+        else
+          {}
+        end
+      end
+
+      def hash_of_additional_payload(record)
+        return nil if @additional_payload.nil? && @additional_payload.empty?
+
+        build_additional_payload(record)
       end
     end
   end

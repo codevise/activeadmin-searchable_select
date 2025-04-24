@@ -140,6 +140,60 @@ RSpec.describe 'searchable_select_options dsl', type: :request do
     end
   end
 
+  describe 'with additional_payload' do
+    context 'as lambda' do
+      before(:each) do
+        ActiveAdminHelpers.setup do
+          ActiveAdmin.register(Post) do
+            searchable_select_options(
+              scope: Post,
+              text_attribute: :title,
+              additional_payload: lambda do |record|
+                { published: record.published }
+              end
+            )
+          end
+        end
+      end
+      let!(:post) { Post.create!(title: 'A post', published: false) }
+
+      subject { get '/admin/posts/all_options' }
+
+      it 'returns options with our additional attribute' do
+        subject
+        expect(json_response).to match(
+          results: [{ text: 'A post', id: post.id, published: false }],
+          pagination: { more: false }
+        )
+      end
+    end
+
+    context 'as Proc' do
+      before(:each) do
+        ActiveAdminHelpers.setup do
+          ActiveAdmin.register(Post) do
+            searchable_select_options(
+              scope: Post,
+              text_attribute: :title,
+              additional_payload: proc { |record| { published: record.published } }
+            )
+          end
+        end
+      end
+      let!(:post) { Post.create!(title: 'A post', published: false) }
+
+      subject { get '/admin/posts/all_options' }
+
+      it 'returns options with our additional attribute' do
+        subject
+        expect(json_response).to match(
+          results: [{ text: 'A post', id: post.id, published: false }],
+          pagination: { more: false }
+        )
+      end
+    end
+  end
+
   it 'allows passing lambda as scope' do
     ActiveAdminHelpers.setup do
       ActiveAdmin.register(Post) do

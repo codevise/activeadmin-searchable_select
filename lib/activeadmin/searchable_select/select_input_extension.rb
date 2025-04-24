@@ -20,6 +20,10 @@ module ActiveAdmin
     # - `params`: Hash of query parameters that shall be passed to the
     #   options endpoint.
     #
+    # - `path_params`: Hash of parameters, which would be passed to the
+    #   dynamic collection path generation for the resource.
+    #   e.g `admin_articles_path(path_params)`
+    #
     # If the `ajax` option is present, the `collection` option is
     # ignored.
     module SelectInputExtension
@@ -45,9 +49,11 @@ module ActiveAdmin
 
       def ajax_url
         return unless options[:ajax]
-        template.polymorphic_path([template.active_admin_namespace.name, ajax_resource_class],
-                                  action: option_collection.collection_action_name,
-                                  **ajax_params)
+        [ajax_resource.route_collection_path(path_params),
+         '/',
+         option_collection.collection_action_name,
+         '?',
+         ajax_params.to_query].join
       end
 
       def all_options_collection
@@ -78,7 +84,7 @@ module ActiveAdmin
       end
 
       def option_collection_scope
-        option_collection.scope(template, ajax_params)
+        option_collection.scope(template, path_params.merge(ajax_params))
       end
 
       def option_collection
@@ -120,6 +126,10 @@ module ActiveAdmin
 
       def ajax_params
         ajax_options.fetch(:params, {})
+      end
+
+      def path_params
+        ajax_options.fetch(:path_params, {})
       end
 
       def ajax_options

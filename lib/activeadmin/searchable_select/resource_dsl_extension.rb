@@ -26,6 +26,23 @@ module ActiveAdmin
       #
       # @param name [Symbol] Optional collection name if helper is
       #   used multiple times within one resource.
+      #
+      # @param additional_payload [Proc]
+      #   Adds additional attributes to the results array
+      # @example
+      #
+      #   ActiveAdmin.register Tag do
+      #     searchable_select_options(
+      #       scope: Color,
+      #       text_attributes: :title,
+      #       additional_payload: lambda { |record| { color: record.color } }
+      #     )
+      #   end
+      # @json
+      # {
+      #   "results": [{ "id": "1", "text": "Red", "color": "#FFF" }],
+      #   "pagination": { "more": "false" }
+      # }
       def searchable_select_options(name: :all, **options)
         option_collection = OptionCollection.new(name, options)
         config.searchable_select_option_collections[name] = option_collection

@@ -6,4 +6,8 @@ Gemfile.lock
 /pkg/*
 /spec/internal/tmp
 /spec/internal/db/*.sqlite
+/spec/internal/db/*.sqlite-shm
+/spec/internal/db/*.sqlite-wal
 /spec/examples.txt
+/src
+/node_modules
