@@ -1,5 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 
+require 'logger'
 require 'combustion'
 Combustion.initialize!(:active_record, :action_controller, :action_view, :sprockets)
 
