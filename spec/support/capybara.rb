@@ -1,6 +1,5 @@
 require 'capybara/rspec'
 require 'selenium-webdriver'
-require 'webdrivers/chromedriver'
 
 Capybara.javascript_driver = :selenium_chrome_headless
 
