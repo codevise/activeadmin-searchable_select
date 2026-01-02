@@ -1,15 +1,11 @@
 # CHANGELOG
 
-### Version 1.9.0
+### Unreleased Changes
 
-2026-01-02
+[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-9-stable...master)
 
-[Compare changes](https://github.com/codevise/activeadmin-searchable_select/compare/1-8-stable...v1.9.0)
-
-- Relax Ruby version requirement to allow Ruby 4 and up. Drop support
-  for EOL Ruby versions below 3.
-  ([#55](https://github.com/codevise/activeadmin-searchable_select/pull/55))
+None so far.
 
 See
-[1-8-stable branch](https://github.com/codevise/activeadmin-searchable_select/blob/1-8-stable/CHANGELOG.md)
+[1-9-stable branch](https://github.com/codevise/activeadmin-searchable_select/blob/1-9-stable/CHANGELOG.md)
 for previous changes.
