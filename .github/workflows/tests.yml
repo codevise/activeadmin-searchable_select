@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         ruby-version:
-          - '3.0'
+          - '3.3'
         gemfile:
           - gemfiles/rails_6.x_active_admin_2.x.gemfile
           - gemfiles/rails_6.x_active_admin_3.x.gemfile
