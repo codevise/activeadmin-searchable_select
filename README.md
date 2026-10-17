@@ -339,6 +339,87 @@ end
 
 This will generate the path for fetching as `all_options_admin_option_type_option_values(option_type_id: f.object.product.option_type_id)` (e.g. `/admin/option_types/2/option_values/all_options`)
 
+#### Dependent Selects
+
+Let one select narrow down the options of another with `depends_on`.
+The dependent input stays disabled until every input it depends on
+has a value, and is cleared as soon as one of them changes. Resets
+cascade down the chain, and saving the form stores what is shown: a
+disabled dependent input is submitted blank.
+
+```ruby
+   ActiveAdmin.register Trip do
+     form do |f|
+       f.input(:country, as: :searchable_select, ajax: true)
+       f.input(:origin, as: :searchable_select, depends_on: :country)
+       f.input(:destination,
+               as: :searchable_select,
+               ajax: { collection_name: :destinations },
+               depends_on: [:country, :origin])
+     end
+   end
+```
+
+`depends_on` implies `ajax: true`. The current values of the inputs it
+depends on are passed to the scope lambda, keyed by their names:
+
+```ruby
+   ActiveAdmin.register City do
+     searchable_select_options(scope: ->(params) { City.where(country_id: params[:country]) },
+                               text_attribute: :name)
+
+     searchable_select_options(name: :destinations,
+                               scope: lambda do |params|
+                                 City.where(country_id: params[:country])
+                                     .where.not(id: params[:origin])
+                               end,
+                               text_attribute: :name)
+   end
+```
+
+`has_many` associations, including `:through` ones, render as
+multi-selects. Inputs depending on them receive an array:
+
+```ruby
+   f.input(:stops, as: :searchable_select, depends_on: :country)
+   f.input(:destination, as: :searchable_select,
+           ajax: { collection_name: :among_stops }, depends_on: :stops)
+
+   searchable_select_options(name: :among_stops,
+                             scope: ->(params) { City.where(id: params[:stops]) },
+                             text_attribute: :name)
+```
+
+Filters work the same way:
+
+```ruby
+   ActiveAdmin.register Trip do
+     filter(:country, as: :searchable_select, ajax: true)
+     filter(:origin, as: :searchable_select, depends_on: :country)
+   end
+```
+
+When the endpoint expects a different parameter name, map it: keys
+are parameter names, values are the inputs they are taken from. This
+lets one endpoint serve inputs named differently, e.g. a country
+stored on another table:
+
+```ruby
+   class Trip < ActiveRecord::Base
+     belongs_to :organization
+     has_one :organization_country, through: :organization, source: :country
+   end
+
+   ActiveAdmin.register Trip do
+     filter(:organization_country, as: :searchable_select, ajax: true)
+     filter(:stops, as: :searchable_select, depends_on: { country: :organization_country })
+   end
+```
+
+Ransack resolves such a filter through the association, so the target
+model has to allow its `id`: `Country.ransackable_attributes` must
+include `"id"`.
+
 #### Inlining Ajax Options in Feature Tests
 
 When writing UI driven feature specs (i.e. with Capybara),

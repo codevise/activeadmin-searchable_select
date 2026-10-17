@@ -1,5 +1,27 @@
 module ActiveAdmin
   module SearchableSelect
+    module SelectInputRegistration
+      def input_html_options
+        super.merge('data-searchable-select-default-name' => input_html_options_name)
+      end
+
+      def to_html
+        (builder.instance_variable_get(:@searchable_select_inputs) ||
+          builder.instance_variable_set(:@searchable_select_inputs, {}))[method.to_s] = self
+        super
+      end
+
+      protected
+
+      def selected_values
+        @object.send(input_name) if @object
+      end
+
+      def read_only?
+        options.dig(:input_html, :disabled)
+      end
+    end
+
     # Mixin for searchable select inputs.
     #
     # Supports the same options as inputs of type `:select`.
@@ -31,12 +53,12 @@ module ActiveAdmin
       def input_html_options
         options = super
         options[:class] = [options[:class], 'searchable-select-input'].compact.join(' ')
-        options.merge('data-ajax-url' => ajax_url)
+        options.merge('data-ajax-url' => ajax_url).merge(dependency_html_options)
       end
 
       # @api private
       def collection_from_options
-        return super unless options[:ajax]
+        return super unless ajax?
 
         if SearchableSelect.inline_ajax_options
           all_options_collection
@@ -45,10 +67,71 @@ module ActiveAdmin
         end
       end
 
+      def select_html
+        return super if dependencies.empty?
+
+        builder.hidden_field(input_name, value: '', id: nil, multiple: multiple?,
+                                         disabled: read_only?) + super
+      end
+
+      protected
+
+      def read_only?
+        super || dependencies.values.any? { |input| input.read_only? }
+      end
+
       private
 
+      def ajax?
+        options[:ajax] || dependencies.any?
+      end
+
+      def dependencies
+        @dependencies ||= Array.wrap(options[:depends_on]).compact
+                               .map { |dep| dep.is_a?(Hash) ? dep : { dep => dep } }
+                               .reduce({}, :merge)
+                               .transform_values { |attribute| dependency_input(attribute) }
+      end
+
+      def dependency_input(attribute)
+        rendered_inputs[attribute.to_s] ||
+          self.class.new(builder, template, object, object_name, attribute,
+                         dependency_input_options(attribute))
+      end
+
+      def dependency_input_options(attribute)
+        return {} unless builder.is_a?(ActiveAdmin::Filters::FormBuilder)
+
+        filter_options = template.active_admin_config.filters.fetch(attribute.to_sym, {})
+        return filter_options unless filter_options[:input_html].is_a?(Proc)
+
+        filter_options.merge(input_html: template.instance_exec(&filter_options[:input_html]))
+      end
+
+      def rendered_inputs
+        builder.instance_variable_get(:@searchable_select_inputs) ||
+          builder.instance_variable_set(:@searchable_select_inputs, {})
+      end
+
+      def dependency_values
+        dependencies.transform_values { |input| input.selected_values }
+      end
+
+      def dependency_html_options
+        return {} if dependencies.empty? || options.dig(:input_html, :disabled)
+
+        names = dependencies.transform_values { |input| input.input_html_options[:name] }
+        disabled = dependencies.values.any? do |input|
+          value = input.selected_values
+          input.input_html_options[:disabled] || value.nil? || value.try(:empty?)
+        end
+
+        { 'data-searchable-select-depends-on' => names.to_json,
+          disabled: disabled }
+      end
+
       def ajax_url
-        return unless options[:ajax]
+        return unless ajax?
         [ajax_resource.route_collection_path(path_params),
          '/',
          option_collection.collection_action_name,
@@ -79,12 +162,8 @@ module ActiveAdmin
           end
       end
 
-      def selected_values
-        @object.send(input_name) if @object
-      end
-
       def option_collection_scope
-        option_collection.scope(template, path_params.merge(ajax_params))
+        option_collection.scope(template, path_params.merge(ajax_params).merge(dependency_values))
       end
 
       def option_collection
@@ -133,8 +212,10 @@ module ActiveAdmin
       end
 
       def ajax_options
-        options[:ajax] == true ? {} : options[:ajax]
+        options[:ajax].is_a?(Hash) ? options[:ajax] : {}
       end
     end
   end
 end
+
+Formtastic::Inputs::SelectInput.prepend ActiveAdmin::SearchableSelect::SelectInputRegistration

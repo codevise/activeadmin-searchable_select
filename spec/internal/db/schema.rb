@@ -51,6 +51,32 @@ ActiveRecord::Schema.define do
     t.belongs_to :option_value
   end
 
+  create_table(:countries, force: true) do |t|
+    t.string :name
+  end
+
+  create_table(:cities, force: true) do |t|
+    t.string :name
+    t.belongs_to :country
+  end
+
+  create_table(:organizations, force: true) do |t|
+    t.string :name
+    t.belongs_to :country
+  end
+
+  create_table(:trips, force: true) do |t|
+    t.belongs_to :organization
+    t.belongs_to :country
+    t.belongs_to :origin
+    t.belongs_to :destination
+  end
+
+  create_table(:trip_stops, force: true) do |t|
+    t.belongs_to :trip
+    t.belongs_to :city
+  end
+
   create_table(:users, force: true) do |t|
     t.string :name
   end
